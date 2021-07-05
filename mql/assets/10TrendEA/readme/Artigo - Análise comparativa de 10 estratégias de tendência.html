@@ -1,0 +1,1805 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>MQL5 Site / Análise comparativa de 10 estratégias de tendência - Artigos MQL5 </title>
+   <link href="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/core.css" type="text/css" rel="stylesheet" media="all"><link href="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/all.css" type="text/css" rel="stylesheet" media="all"><link href="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/articles.css" type="text/css" rel="stylesheet" media="all">
+    
+   <style type="text/css">
+     html {height:100%;min-height: 100%;}
+     body {margin:0;padding:0;height: 100%;min-height: 100%;}
+   </style>
+<script type="text/javascript">
+
+        function runCallbacks(l) { var a; for (a = 0; a < l.length; a += 1)l[a]() } function callReady() { var l = mqGlobal.readyCalls; mqGlobal.pageReady && l.length && (mqGlobal.readyCalls = [], runCallbacks(l)) } function callLoad() { var l = mqGlobal.loadCalls; mqGlobal.pageLoaded && l.length && (mqGlobal.loadCalls = [], runCallbacks(l)) } function pageReady() { mqGlobal.pageReady || (mqGlobal.pageReady = !0, scrollIntervalId && clearInterval(scrollIntervalId), callReady()) } function pageLoaded() { mqGlobal.pageReady || (mqGlobal.pageReady = !0, scrollIntervalId && clearInterval(scrollIntervalId), callReady()), mqGlobal.pageLoaded || (mqGlobal.pageLoaded = !0, scrollIntervalId && clearInterval(scrollIntervalId), callLoad()) } var mqGlobal = {}, isTop, testDiv, scrollIntervalId, isBrowser = "undefined" != typeof window && window.document, doc = isBrowser ? document : null; if (mqGlobal.readyCalls = [], mqGlobal.loadCalls = [], mqGlobal.pageLoaded = !1, mqGlobal.pageReady = !1, isBrowser) { if (document.addEventListener) document.addEventListener("DOMContentLoaded", pageReady, !1), window.addEventListener("load", pageLoaded, !1); else if (window.attachEvent) { window.attachEvent("onload", pageLoaded), testDiv = document.createElement("div"); try { isTop = null === window.frameElement } catch (l) { } testDiv.doScroll && isTop && window.external && (scrollIntervalId = setInterval(function () { try { testDiv.doScroll(), pageReady() } catch (l) { } }, 30)) } "complete" === document.readyState && pageLoaded() } mqGlobal.AddOnReady = function (l) { mqGlobal.pageReady ? l(doc) : mqGlobal.readyCalls.push(l) }, mqGlobal.AddOnLoad = function (l) { mqGlobal.pageLoaded ? l(doc) : mqGlobal.loadCalls.push(l) }, mqGlobal.AddOnActiveWindowChange = function (l) { this._onvisibility || (this._onvisibility = []), this._onvisibility[this._onvisibility.length] = l };
+        mqGlobal.CookieDomain = ".mql5.com";
+        mqGlobal.Language = 'pt';
+        mqGlobal.IsMobile = false;
+
+        mqGlobal.ClearRteStorage = function (e) { if (window.GStorage || (window.GStorage = globalStorage(window.globalStorageDomain, window.globalStoragePage)), window.GStorage.supported) try { var o = e; window.GStorage.getItem("rte_autosave_uid", function (e, t) { t == o && (window.GStorage.removeItem("rte_autosave_text"), window.GStorage.removeItem("rte_autosave_date"), window.GStorage.removeItem("rte_autosave_uid")) }) } catch (e) { } };
+</script>
+    <link rel="canonical" href="https://www.mql5.com/pt/articles/3074">
+    <meta name="robots" content="noindex">
+</head>
+<body cz-shortcut-listen="true">
+   
+<div class="articles-content" style="margin-left:0px; border-left:none;">
+    <div class="content">
+      <h2>Análise comparativa de 10 estratégias de tendência</h2>
+      <p class="scribe">
+        <a href="https://www.mql5.com/pt/users/Alex2356" class="author">Alexander Fedosov</a>  | 26 abril, 2017
+      </p>  
+    <br><div id="content">
+  <h3>Conteúdo</h3>
+<ul>
+  <li><a href="https://www.mql5.com/pt/articles/3074#intro">Introdução</a></li>
+  <li><a href="https://www.mql5.com/pt/articles/3074#task">Abordagem do problema ao criar a estratégia de tendência</a></li>
+  <li><a href="https://www.mql5.com/pt/articles/3074#trend_strategies">Estratégias de tendência</a></li>
+  <ul>
+    <li><a href="https://www.mql5.com/pt/articles/3074#strategy1"> Estratégia №1. Indicador ADXCloud com RSI de confirmação sob a forma de histograma.</a></li>
+    <li><a href="https://www.mql5.com/pt/articles/3074#strategy2"> Estratégia №2. Indicador de tendência Standard Deviation sob a forma de histograma com confirmação do RVI.</a></li>
+    <li><a href="https://www.mql5.com/pt/articles/3074#strategy3"> Estratégia №3. Interpretação de nuvem do AC de Bill Williams e indicador composto Bears Power e Bulls Power.</a></li>
+    <li><a href="https://www.mql5.com/pt/articles/3074#strategy4"> Estratégia №4. Centro de gravidade J. F. Ehlers confirmado pleo indicador de celeridade do preço.</a></li>
+    <li><a href="https://www.mql5.com/pt/articles/3074#strategy5"> Estratégia №5. Indicador integrado Onda Binária.</a></li>
+    <li><a href="https://www.mql5.com/pt/articles/3074#strategy6"> Estratégia №6. Indicador integrado Weight Oscillator em conjunto com LeMan Objective.</a></li>
+    <li><a href="https://www.mql5.com/pt/articles/3074#strategy7"> Estratégia №7. Donchian Channel em conjunto com o MACD, em que a série de preço é substituída pelos valores de Williams.</a></li>
+    <li><a href="https://www.mql5.com/pt/articles/3074#strategy8"> Estratégia №8. Oscilador cíclico Schaff com confirmação de acordo com três níveis Tirone.</a></li>
+    <li><a href="https://www.mql5.com/pt/articles/3074#strategy9"> Estratégia №9. Canal Keltner como um histograma e indicador iTrend na forma de nuvem.</a></li>
+    <li><a href="https://www.mql5.com/pt/articles/3074#strategy10"> Estratégia №10. Impulso de preço Average Change e leque de médias móveis FigurelliSeries.</a></li>
+</ul>
+  <li><a href="https://www.mql5.com/pt/articles/3074#tests">Teste</a></li>
+  <li><a href="https://www.mql5.com/pt/articles/3074#conclusions">Conclusões</a></li>
+  <li><a href="https://www.mql5.com/pt/articles/3074#end">Conclusão</a></li>
+</ul>
+<h3 id="intro">Introdução</h3>
+<p style="text-align:justify;">As estratégias de negociação de tendência
+ são muito populares ao trabalhar nos mercados de moedas. Sua finalidade
+ consiste em detectar um forte movimento unidirecional, encontrar os 
+pontos favoráveis para entrar no mercado e, não menos importante, 
+definir corretamente o momento de saída. Para este artigo, eu selecionei
+ alguns instrumentos técnicos para determinar direta ou indiretamente a 
+tendência. A partir deles foram elaboradas 10 estratégias de tendência 
+que, por sua vez, são implementadas como Expert Advisors para o 
+MetaTrader 5.&nbsp;De acordo com os resultados de seu desempenho, eu 
+analisei as vantagens e desvantagens de cada estratégia e, assim, 
+realizei sua comparação. O propósito deste artigo é prover ao leitor a 
+visão mais completa sobre os pontos fracos e fortes de negociação de 
+tendência. Outras estratégias de tendência são descritas no artigo&nbsp;<span class="title"><a href="https://www.mql5.com/pt/articles/136">Diversas maneiras de encontrar uma tendência no MQL5</a>.<br></span></p>
+
+<h3 id="task">Abordagem do problema ao criar a estratégia de tendência</h3>
+<div style="margin:0px; padding:0px;">
+  <p>À primeira vista parece que desenvolver uma estratégia de tendência
+ não é tão difícil. Basta definir a tendência usando a análise técnica, 
+abrir uma posição e esperar o próximo movimento, se possível, aumentando
+ a posição. Teoricamente é impossível contra-argumentar essa abordagem. 
+No entanto, na prática, surgem várias questões importantes. <br>
+  </p>
+  <p style="text-align:center;">‌<img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/001__8.png" title="" alt="" style="border-width:0px; max-width:100%; vertical-align:middle;" width="750" height="480"></p>
+  <p style="text-align:center;"><span class="small">Fig.1 Áreas de definição da tendência e da fase de correção.</span></p>
+</div>
+<p style="text-align:start;"><i>Tarefa №1. Detecção da tendência.</i></p>
+<p style="text-align:start;">Como regra geral, a detecção e a 
+confirmação de uma tendência leva tempo. É por isso que, no início da 
+tendência, será impossível conseguir uma entrada que seja tão confiável 
+quanto possível. Veja a figura 1. É impossível definir a entrada como um
+ ponto no gráfico, uma vez que somente vemos <span style="background-color:rgb(216, 232, 194);">uma região favorável para entrar no mercado</span>.
+ A definição sob a forma de área é justificada pelo fato de que durante a
+ análise surgem atrasos quanto ao aparecimento do sinal, enquanto, para 
+confirmar a tendência, é necessário esperar um determinado tempo. Como 
+exemplo temos os sistemas de negociação nos quais um indicador envia um 
+sinal de presença de tendência, enquanto, após algum tempo, outro 
+confirma ou não esse sinal. Essa abordagem "come" tempo. E tempo é 
+dinheiro ou, no nosso caso, lucro perdido.<br>
+</p>
+<p style="text-align:start;"><i>Tarefa №2. O objetivo da posição aberta.</i></p>
+<p style="text-align:start;">Bem, neste ponto, identificamos a tendência
+ e confirmamos seu sinal. Agora é preciso entrar no mercado. Mas, antes 
+disso, é necessário determinar os objetivos de lucro. É possível tanto 
+fixar em pontos quanto deixar de maneira dinâmica o lucro-alvo, 
+dependendo da força da tendência prevista. Neste caso, é possível 
+trabalhar com níveis de suporte/resistência. Mas a questão continua 
+sendo o fato de que antes de entrar no mercado, é necessário saber 
+exatamente quando vamos sair dele. A partir disto, surge o seguinte 
+desafio.</p>
+<p style="text-align:start;"><i>Tarefa №3. Definição da conclusão da tendência.&nbsp;</i></p>
+<p style="text-align:start;">‌Vamos ver novamente a figura 1.&nbsp;Nela é apresentada claramente a seguinte situação: <span style="background-color:rgb(216, 232, 194);">nós entramos na posição na área verde</span>, em seguida, a tendência continua até à <span style="background-color:rgb(164, 192, 228);">área de fase de correção.</span>
+ É neste ponto que se torna necessário definir se se trata de um estado 
+temporário ou estamos na hora de entrar no mercado. Neste caso, a fase 
+de correção (plano) foi curta e a tendência continuou. Gostaria de 
+deixar bem claro que, nas estratégias com lucros-alvo fixos, a duração e
+ o tamanho do movimento em pontos são previstos com base na avaliação da
+ tendência confirmada na tarefa №2.&nbsp;</p>
+<p style="text-align:start;">‌</p>
+<h3 id="trend_strategies">Estratégias de tendência</h3>
+<p> Gostaria de deixar bem clara a condição geral. No que diz respeito à
+ visão geral das estratégias de tendência, decidi não pegar nem 
+timeframes demasiado grandes nem em demasiado pequenos, uma vez que, nos
+ mais pequenos, surgem muitos sinais falsos, enquanto, nos demasiado 
+grandes, pelo contrário, a seletividade nessas condições é tão grande 
+que o número de entradas no mercado é muito reduzido para analisar 
+objetivamente a eficiência da estratégia. É por isto que, para testar, 
+serão selecionados os timeframes na gama de M30 a H4. <br>
+</p>
+<div style="margin:0px; padding:0px;">
+  <p id="strategy1"><b>Estratégia №1: Indicador ADXCloud com RSI de confirmação sob a forma de histograma.</b></p>
+</div>
+<p style="text-align:start;">A primeira estratégia que consideraremos 
+está baseada no indicador modificado ADX, ou seja, o ADXCloud. 
+Confirmaremos o sinal usando o oscilador RSI com níveis de 
+sobrevenda/sobrecompra. Ele é apresentado como histograma, nele, as 
+colunas verdes de valores do RSI estão relacionadas com a zona de 
+sobrecompra, enquanto que as vermelhas com a zona de sobrevenda. <br>
+</p>
+<table class="standart" style="border-right:1px solid rgb(73, 73, 73); border-top:1px solid rgb(73, 73, 73);" width="75%" cellspacing="0" cellpadding="2">
+  <thead>
+    <tr>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Parâmetros</th>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Descrição</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/2172">ADXCloud</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">RSIColor</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Período</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">H1</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de compra</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Se a nuvem mudar de vermelho para verde, e, o histograma RSIColor for verde.</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de venda</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Se a nuvem mudar de verde para vermelho, e, o histograma RSIColor for vermelho.</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de saída &nbsp;</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Take-Profit/Stop-Loss</td>
+    </tr>
+  </tbody>
+</table>
+<p style="text-align:start;">Na Fig.2, esta estratégia é apresentada 
+graficamente. Observe que, no timeframe H1, as áreas definidas como 
+tendências duram algumas barras, portanto, nas condições de saída, não é
+ aconselhável selecionar valores grandes de Take-Profit e Stop-Loss.</p>
+<p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/002__5.png" title="" alt="" style="border-width:0px; max-width:100%; vertical-align:middle;" width="750" height="480"></p>
+<p style="text-align:center;"><span class="small">Fig.2 Condições de entrada segundo a estratégia de tendência №1</span></p>
+<p style="text-align:left;">O código para implementação do Expert Advisor sobre esta estratégia tem a seguinte aparência: <br>
+</p>
+<pre class="code"><span class="keyword">void</span> <span class="functions">OnTick</span>()
+&nbsp;&nbsp;{
+<span class="comment">//--- Verificação de ordens abertas anteriormente pelo EA</span>
+&nbsp;&nbsp; <span class="keyword">if</span>(!Trade.IsOpened(Inp_MagicNum))
+&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Obtenção de dados para cálculo</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(!GetIndValue())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="keyword">return</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de compra</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(BuySignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.BuyPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de venda</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(SellSignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.SellPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de compra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> BuySignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(adx[<span class="number">0</span>]&gt;<span class="number">0</span> &amp;&amp; adx[<span class="number">1</span>]&lt;<span class="number">0</span> &amp;&amp; rsi1[<span class="number">0</span>]==<span class="number">1</span>)?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de venda&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> SellSignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(adx[<span class="number">0</span>]&lt;<span class="number">0</span> &amp;&amp; adx[<span class="number">1</span>]&gt;<span class="number">0</span> &amp;&amp; rsi2[<span class="number">0</span>]==<span class="number">1</span>)?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Obtenção dos valores atuais dos indicadores&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> GetIndValue()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(<span class="functions">CopyBuffer</span>(InpInd_Handle1,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,rsi1)&lt;=<span class="number">0</span> ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyBuffer</span>(InpInd_Handle1,<span class="number">1</span>,<span class="number">0</span>,<span class="number">2</span>,rsi2)&lt;=<span class="number">0</span> ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyBuffer</span>(InpInd_Handle2,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,adx)&lt;=<span class="number">0</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)?<span class="macro">false</span>:<span class="macro">true</span>;
+&nbsp;&nbsp;}
+
+</pre>
+
+<p style="text-align:start;"><br>
+  
+  ‌</p><p id="strategy2"><b>Estratégia №2: Indicador de tendência Standard Deviation sob a forma de histograma com confirmação do RVI.</b></p>
+<p style="text-align:start;">Esta estratégia é uma modificação do 
+indicador de tendência Standard Deviation e oscilador RVI.‌ Saiba mais 
+sobre como funcionam acessando os links na tabela.</p>
+<table class="standart" style="border-right:1px solid rgb(73, 73, 73); border-top:1px solid rgb(73, 73, 73);" width="75%" cellspacing="0" cellpadding="2">
+  <thead>
+    <tr>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Parâmetros</th>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Descrição</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/761">ColorStdDev</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/13178">ColorZerolagRVI</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Período</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">H1</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de compra</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Se o histograma ColorStdDev for vermelho (tendência forte), e, a nuvem ColorZerolagRVI, verde.</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de venda</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Se o histograma ColorStdDev for vermelho (tendência forte), e, a nuvem ColorZerolagRVI, vermelha.</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de saída &nbsp;</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Take-Profit/Stop-Loss</td>
+    </tr>
+  </tbody>
+</table>
+<p style="text-align:start;">A estratégia é apresentada na Fig.3. Nela 
+as áreas de movimento forte são definidas usando o Standard Deviation. A
+ tendência é confirmada através da modificação do oscilador RVI 
+construído com base em quatro RVI padrão com diferentes períodos e 
+coeficientes corretores.</p>
+<p style="text-align:start;">‌</p>
+<p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/003__2.png" title="" alt="" style="border-width:0px; max-width:100%; vertical-align:middle;" width="750" height="480"></p>
+<p style="text-align:center;"><span class="small">Fig.3 Condições de entrada segundo a estratégia de tendência №2</span></p>
+<p style="text-align:left;">Observe que, ao implementar esta estratégia,
+ nas configurações ColorStDev é solicitado definir empiricamente o valor
+ das tendências forte e moderada, e fase de correção (plano). Deixamos 
+estes valores por padrão, mas por conveniência <span style="background-color:rgb(177, 210, 143);">inserimos a opção Used Trend, ela permite selecionar o tipo de tendência no qual vale a pena confiar — moderada ou forte</span>.
+ Assim, não é necessário de cada vez redefinir os três indicadores, 
+basta alternar um. O sinal da tendência forte é mais adequado para a 
+estratégia atual, porque escolhemos o timeframe 1H. A opção da tendência
+ média é mais adequada para testes em timeframes maiores. Ao acontecer 
+isto, é necessário ter em mente que serão mais os sinais para entrada 
+com uso da tendência moderada, portanto, para filtrar os sinais falsos e
+ sair lucrado, é necessário sempre levar em contra os lucros-alvo e o 
+timeframe atual.</p>
+<pre class="code"><span class="comment">//--- Parâmetros do indicador ColorStDev</span>
+
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;period = <span class="number">12</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Smoothing period StDev</span>
+<span class="keyword">input</span> <span class="macro">ENUM_MA_METHOD</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MA_Method=<span class="macro">MODE_EMA</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Histogram smoothing method</span>
+<span class="keyword">input</span> <span class="macro">ENUM_APPLIED_PRICE</span>&nbsp;&nbsp; applied_price=<span class="macro">PRICE_CLOSE</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Applied price</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MaxTrendLevel=<span class="number">100</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Maximum trend level</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MiddLeTrendLevel=<span class="number">40</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Middle trend level</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FlatLevel=<span class="number">10</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Flat level</span>
+<span style="background-color:rgb(177, 210, 143);"><span class="keyword">input</span> Trend&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TrendLevel=Maximum;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;       <span class="comment">//Used trend</span></span>
+</pre>
+
+<p style="text-align:left;">A essência da estratégia é apresentada no código:</p>
+<pre class="code"><span class="keyword">void</span> <span class="functions">OnTick</span>()
+&nbsp;&nbsp;{
+<span class="comment">//--- Verificação de ordens abertas anteriormente pelo EA</span>
+&nbsp;&nbsp; <span class="keyword">if</span>(!Trade.IsOpened(Inp_MagicNum))
+&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Obtenção de dados para cálculo</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(!GetIndValue())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="keyword">return</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de compra</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(BuySignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.BuyPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de venda</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(SellSignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.SellPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de compra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> BuySignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(stdev[<span class="number">0</span>]&gt;trend &amp;&amp; rvi_fast[<span class="number">0</span>]&gt;rvi_slow[<span class="number">0</span>])?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de venda&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> SellSignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(stdev[<span class="number">0</span>]&gt;trend &amp;&amp; rvi_fast[<span class="number">0</span>]&lt;rvi_slow[<span class="number">0</span>])?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Obtenção dos valores atuais dos indicadores&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> GetIndValue()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(<span class="functions">CopyBuffer</span>(InpInd_Handle1,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,stdev)&lt;=<span class="number">0</span> ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyBuffer</span>(InpInd_Handle2,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,rvi_fast)&lt;=<span class="number">0</span> ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyBuffer</span>(InpInd_Handle2,<span class="number">1</span>,<span class="number">0</span>,<span class="number">2</span>,rvi_slow)&lt;=<span class="number">0</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)?<span class="macro">false</span>:<span class="macro">true</span>;
+&nbsp;&nbsp;}
+
+</pre>
+
+<p style="text-align:left;">‌</p>
+<p id="strategy3"><b>Estratégia №3: Interpretação de nuvem do AC de Bill Williams e indicador composto Bears Power e Bulls Power. </b><br>
+ Na seguinte estratégia, decidi experimentar o vínculo entre a 
+interpretação de nuvem do&nbsp;Accelerator Oscillator(AC) de Bill 
+Williams e os osciladores Bears Power e Bulls Power combinados. ‌</p>
+<table class="standart" style="border-right:1px solid rgb(73, 73, 73); border-top:1px solid rgb(73, 73, 73);" width="75%" cellspacing="0" cellpadding="2">
+  <thead>
+    <tr>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Parâmetros</th>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Descrição</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/16389">Bear_Bulls_Power</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/2392">CronexAC</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Período</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">H1</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de compra</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">O
+ histograma exibe o crescimento (altera a cor de rosa para azul, se o 
+valor do indicador for inferior a zero), nuvem CroneAC azul.</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de venda</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">O histograma exibe a queda (altera a cor de azul para rosa, se o valor do indicador for superior a zero), nuvem CroneAC laranja.</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de saída &nbsp;</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Take-Profit/Stop-Loss</td>
+    </tr>
+  </tbody>
+</table>
+<p style="text-align:left;">A estratégia é apresentada na Fig.4. Quanto 
+aos sinais de entrada o problema tem a ver com o acompanhamento do 
+crescimento anterior do histograma. Em outras palavras, temos de 
+encontrar o momento em que os touros substituem os ursos ou vice-versa 
+e, em seguida, confirmar o sinal usando o oscilador.</p>
+<p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/004__2.png" title="" alt="" style="border-width:0px; max-width:100%; vertical-align:middle;" width="750" height="480"></p>
+<p style="text-align:center;"><span class="small">Fig.4 Condições de entrada segundo a estratégia de tendência №3</span></p>
+<p style="text-align:left;">A estratégia permite variar as condições de 
+entrada, isto é, é possível procurar, em vez de um crescimento 
+"anterior" do histograma, um sinal posterior, por exemplo, a transição 
+do indicador pelo zero ou a alteração do signo de seu valor. Existe a 
+possibilidade de que o resultado pode dar apenas uma alteração da cor do
+ histograma.&nbsp;A implementação da estratégia de acordo com as 
+condições inicialmente descritas é apresentada na listagem:</p>
+<pre class="code"><span class="keyword">void</span> <span class="functions">OnTick</span>()
+&nbsp;&nbsp;{
+<span class="comment">//--- Verificação de ordens abertas anteriormente pelo EA</span>
+&nbsp;&nbsp; <span class="keyword">if</span>(!Trade.IsOpened(Inp_MagicNum))
+&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Obtenção de dados para cálculo</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(!GetIndValue())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="keyword">return</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de compra</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(BuySignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.BuyPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de venda</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(SellSignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.SellPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de compra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> BuySignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(ac_fast[<span class="number">0</span>]&gt;ac_slow[<span class="number">0</span>] &amp;&amp; bb_power[<span class="number">0</span>]&gt;bb_power[<span class="number">1</span>] &amp;&amp; (bb_power[<span class="number">0</span>]&lt;<span class="number">0</span> &amp;&amp; bb_power[<span class="number">1</span>]&lt;<span class="number">0</span>))?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de venda&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> SellSignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(ac_fast[<span class="number">0</span>]&lt;ac_slow[<span class="number">0</span>] &amp;&amp; bb_power[<span class="number">0</span>]&lt;bb_power[<span class="number">1</span>] &amp;&amp; (bb_power[<span class="number">0</span>]&gt;<span class="number">0</span> &amp;&amp; bb_power[<span class="number">1</span>]&gt;<span class="number">0</span>))?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Obtenção dos valores atuais dos indicadores&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> GetIndValue()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(<span class="functions">CopyBuffer</span>(InpInd_Handle1,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,bb_power)&lt;=<span class="number">0</span> ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyBuffer</span>(InpInd_Handle2,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,ac_fast)&lt;=<span class="number">0</span> ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyBuffer</span>(InpInd_Handle2,<span class="number">1</span>,<span class="number">0</span>,<span class="number">2</span>,ac_slow)&lt;=<span class="number">0</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)?<span class="macro">false</span>:<span class="macro">true</span>;
+&nbsp;&nbsp;}
+
+</pre>
+
+<p id="strategy4"><b>Estratégia №4: Centro de gravidade J. F. Ehlers confirmado pleo indicador de celeridade do preço.</b></p>
+<p style="text-align:start;">A estratégia utiliza o indicador Centro de 
+gravidade de Ehlers sob a forma de um histograma OSMA — 
+CenterOfGravityOSMA. Seu sinal é confirmado por um indicador que calcula
+ a celeridade do preço.</p>
+<table class="standart" style="border-right:1px solid rgb(73, 73, 73); border-top:1px solid rgb(73, 73, 73);" width="75%" cellspacing="0" cellpadding="2">
+  <thead>
+    <tr>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Parâmetros</th>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Descrição</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/13154">CenterOfGravityOSMA</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/1544">Average Speed</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Período</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">H1</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de compra</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">O
+ histograma do Centro de gravidade exibe o crescimento (ao fazer isto, o
+ valor do indicador é inferior a zero), enquanto o valor do Average 
+Speed é superior ao limiar (inicialmente definido nas configurações)</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de venda</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">O
+ histograma do Centro de gravidade exibe a queda (ao fazer isto, o valor
+ do indicador é superior a zero), enquanto o valor do Average Speed é 
+superior ao limiar (inicialmente definido nas configurações)</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de saída &nbsp;</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Take-Profit/Stop-Loss</td>
+    </tr>
+  </tbody>
+</table>
+<p style="text-align:start;">A estratégia é apresentada na Fig.5. Como 
+na estratégia anterior, aqui também acompanhamos a mudança precoce do 
+histograma e confirmamos sua taxa de variação de preço.&nbsp;</p>
+<p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/005__1.png" title="" alt="" style="border-width:0px; max-width:100%; vertical-align:middle;" width="750" height="480"></p>
+<p style="text-align:center;"><span class="small">Fig.5 Condições de entrada segundo a estratégia de tendência №4</span></p>
+<p>Implementação da estratégia:</p>
+<pre class="code"><span class="keyword">void</span> <span class="functions">OnTick</span>()
+&nbsp;&nbsp;{
+<span class="comment">//--- Verificação de ordens abertas anteriormente pelo EA</span>
+&nbsp;&nbsp; <span class="keyword">if</span>(!Trade.IsOpened(Inp_MagicNum))
+&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Obtenção de dados para cálculo</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(!GetIndValue())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="keyword">return</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de compra</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(BuySignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.BuyPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de venda</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(SellSignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.SellPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de compra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> BuySignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(avr_speed[<span class="number">0</span>]&gt;Trend_lev &amp;&amp; cog[<span class="number">1</span>]&lt;cog[<span class="number">0</span>] &amp;&amp;(cog[<span class="number">1</span>]&lt;<span class="number">0</span> &amp;&amp; cog[<span class="number">0</span>]&lt;<span class="number">0</span>))?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de venda&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> SellSignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(avr_speed[<span class="number">0</span>]&gt;Trend_lev &amp;&amp; cog[<span class="number">1</span>]&gt;cog[<span class="number">0</span>] &amp;&amp;(cog[<span class="number">1</span>]&gt;<span class="number">0</span> &amp;&amp; cog[<span class="number">0</span>]&gt;<span class="number">0</span>))?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Obtenção dos valores atuais dos indicadores&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> GetIndValue()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(<span class="functions">CopyBuffer</span>(InpInd_Handle1,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,cog)&lt;=<span class="number">0</span> ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyBuffer</span>(InpInd_Handle2,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,avr_speed)&lt;=<span class="number">0</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)?<span class="macro">false</span>:<span class="macro">true</span>;
+&nbsp;&nbsp;}
+
+</pre>
+
+<p>‌</p>
+<p id="strategy5"><b>Estratégia №5. Indicador integrado Onda Binária.</b></p>
+<p style="text-align:start;">Nas quatro estratégias anteriores, eu aderi
+ o modelo de seleção da relação do indicador principal, que iria mostrar
+ a tendência e o sinal adicional para sua verificação. Agora eu decidi 
+me afastar deste esquema e usar apenas um indicador: o <a href="https://www.mql5.com/pt/code/679">Onda Binária</a>.
+ Tem a aparência de um oscilador, mas, na realidade, implementa e 
+visualmente apresenta os sinais de seis indicadores — MA, MACD, OsM, 
+CCI, Momentum, RSI e ADX. Por si só consiste numa estratégia de 
+negociação auto-suficiente com um sistema de configurações flexível. 
+Além do conjunto de parâmetros padrão para os indicadores selecionados, 
+aqui foram acrescentados pesos - o impacto do sistema de um componente 
+particular.</p>
+<table class="standart" style="border-right:1px solid rgb(73, 73, 73); border-top:1px solid rgb(73, 73, 73);" width="75%" cellspacing="0" cellpadding="2">
+  <thead>
+    <tr>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Parâmetros</th>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Descrição</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/679">Binary_Wave</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Período</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">H1</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de compra</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Transição do oscilador através de zero para cima<br></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de venda</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Transição do oscilador através de zero para baixo</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de saída &nbsp;</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Take-Profit/Stop-Loss</td>
+    </tr>
+  </tbody>
+</table>
+<p style="text-align:start;">Os exemplos de entrada segundo esta 
+estratégia apresentados na Fig.6. Observe que, quanto à programação 
+informática, a fim de otimizar a estratégia de acordo com o H1, foram 
+alteradas - de 14 para 10 - as configurações dos períodos MA_Period, 
+CCIPeriod, MOMPeriod, RSIPeriod e ADX_Period. Para testar com os 
+períodos clássicos é possível mudar o timeframe para H3 ou H4.<br>
+</p>
+<p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/006__1.png" title="" alt="" style="border-width:0px; max-width:100%; vertical-align:middle;" width="750" height="480"></p>
+<p style="text-align:center;"><span class="small"><span>Fig.6 Condições de entrada segundo a estratégia de tendência №5</span></span></p>
+<p style="text-align:start;">Resultado da implementação:‌‌</p>
+<pre class="code"><span class="keyword">void</span> <span class="functions">OnTick</span>()
+&nbsp;&nbsp;{
+<span class="comment">//--- Verificação de ordens abertas anteriormente pelo EA</span>
+&nbsp;&nbsp; <span class="keyword">if</span>(!Trade.IsOpened(Inp_MagicNum))
+&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Obtenção de dados para cálculo</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(!GetIndValue())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="keyword">return</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de compra</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(BuySignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.BuyPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de venda</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(SellSignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.SellPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de compra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> BuySignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(wave[<span class="number">0</span>]&gt;<span class="number">0</span> &amp;&amp; wave[<span class="number">1</span>]&lt;<span class="number">0</span>)?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de venda&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> SellSignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(wave[<span class="number">0</span>]&lt;<span class="number">0</span> &amp;&amp; wave[<span class="number">1</span>]&gt;<span class="number">0</span>)?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Obtenção dos valores atuais dos indicadores&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> GetIndValue()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(<span class="functions">CopyBuffer</span>(InpInd_Handle,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,wave)&lt;=<span class="number">0</span>)?<span class="macro">false</span>:<span class="macro">true</span>;
+&nbsp;&nbsp;}
+
+</pre>
+
+<p id="strategy6">‌<b>Estratégia №6: Indicador integrado Weight Oscillator em conjunto com LeMan Objective.</b></p>
+<p style="text-align:start;">Aqui são combinados os princípios de 
+construção das estratégias utilizadas nos cinco exemplos anteriores. Nós
+ combinamos um sistema pronto e adicionamos nele um indicador que 
+confirma o sinal. O Weight Oscillator será o sistema pronto, este 
+oscilador apresenta a soma ponderada suavizada de quatro indicadores: 
+RSI, MFI, WPR e DeMarker com coeficiente corretor. O LeMan Objective 
+confirma o sinal, calcula&nbsp;a <span>distância entre o preço de 
+abertura e os máximos e mínimos e exibe os quartis de desvios. Também, 
+no número especificado de barras, ele dá uma média móvel das estatística
+ resumidas da alteração do preço em 75, 50, 25 % dos casos, bem como 
+exibe o máximo desvio.&nbsp;</span>Nós acompanharemos o crescimento do 
+histograma do&nbsp;Weight Oscillator para compra, ao fazer isto, na 
+qualidade de confirmação tomaremos a penetração - feita pelo preço - no 
+quartil de desvio com 75% do valor.</p>
+<table class="standart" style="border-right:1px solid rgb(73, 73, 73); border-top:1px solid rgb(73, 73, 73);" width="75%" cellspacing="0" cellpadding="2">
+  <thead>
+    <tr>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Parâmetros</th>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Descrição</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/17063">Weight Oscillator</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/695">LeMan Objective</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Período</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">H1</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de compra</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">O Weight Oscillator cresce e o preço rompe o nível superior de 75% do valor do quartil de desvio.</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de venda</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">O Weight Oscillator cai e o preço rompe o nível inferior de 75% do valor do quartil de desvio.</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de saída &nbsp;</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Take-Profit/Stop-Loss</td>
+    </tr>
+  </tbody>
+</table>
+<p style="text-align:start;">O ponto de entrada pode ser claramente 
+visto na Fig.7, o 75% do nível é destacado com linhas grossas. Vemos que
+ os preços de fechamento rompem estes níveis e são realizadas as 
+condições de crescimento/queda do Weight Oscillator.</p>
+<p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/007__1.png" title="" alt="" style="border-width:0px; max-width:100%; vertical-align:middle;" width="750" height="480">‌</p>
+<p style="text-align:center;"><span class="small">Fig.7 Condições de entrada segundo a estratégia de tendência №6</span></p>
+<p style="text-align:start;">O indicador LeMan Objective para construir níveis próprios utiliza 8 buffers de indicador:</p>
+
+<ul>
+  <li>Quartile 1 corresponde ao valor médio de redução do preço com respeito à amostra em 25% dos casos.</li>
+  <li>Quartile 2 corresponde ao valor médio de redução do preço com respeito à amostra em 50% dos casos.</li>
+  <li>Quartile 3 corresponde ao valor médio de redução do preço com 
+respeito à amostra em 75% dos casos. Isso é o que usamos na estratégia.</li>
+  <li>Quartile 4 corresponde ao desvio máximo do valor médio do preço.&nbsp;</li>
+  <li>Quartile 5 corresponde ao valor médio de aumento do preço com respeito à amostra em 25% dos casos.</li>
+  <li>Quartile 6 corresponde ao valor médio de aumento do preço com respeito à amostra em 50% dos casos.</li>
+  <li>Quartile 7 corresponde ao valor médio de aumento do preço com 
+respeito à amostra em 75% dos casos. Isso é o que usamos na estratégia.</li>
+  <li>Quartile 8 corresponde ao desvio máximo do valor médio do preço.</li>
+</ul>
+<div style="margin:0px; padding:0px;">
+  <p>Portanto, na programação informática, precisaremos, além do Weight Oscillator e dos valores do preço de fechamento, dos <span style="background-color:rgb(177, 210, 143);">buffers 2 e 6.</span>&nbsp;</p>
+  <pre class="code"><span class="keyword">void</span> <span class="functions">OnTick</span>()
+&nbsp;&nbsp;{
+<span class="comment">//--- Verificação de ordens abertas anteriormente pelo EA</span>
+&nbsp;&nbsp; <span class="keyword">if</span>(!Trade.IsOpened(Inp_MagicNum))
+&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Obtenção de dados para cálculo</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(!GetIndValue())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="keyword">return</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de compra</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(BuySignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.BuyPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de venda</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(SellSignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.SellPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de compra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> BuySignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(wo[<span class="number">0</span>]&gt;wo[<span class="number">1</span>] &amp;&amp; close[<span class="number">0</span>]&gt;obj_q3_b[<span class="number">0</span>])?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de venda&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> SellSignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(wo[<span class="number">0</span>]&lt;wo[<span class="number">1</span>] &amp;&amp; close[<span class="number">0</span>]&lt;obj_q3_s[<span class="number">0</span>])?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Obtenção dos valores atuais dos indicadores&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> GetIndValue()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(<span style="background-color:rgb(177, 210, 143);"><span class="functions">CopyBuffer</span>(InpInd_Handle1,<span class="number">6</span>,<span class="number">0</span>,<span class="number">2</span>,obj_q3_b)&lt;=<span class="number">0</span> ||</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color:rgb(177, 210, 143);"><span class="functions">CopyBuffer</span>(InpInd_Handle1,<span class="number">2</span>,<span class="number">0</span>,<span class="number">2</span>,obj_q3_s)&lt;=<span class="number">0</span> ||</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyBuffer</span>(InpInd_Handle2,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,wo)&lt;=<span class="number">0</span> || 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyClose</span>(<span class="functions">Symbol</span>(),<span class="macro">PERIOD_CURRENT</span>,<span class="number">0</span>,<span class="number">2</span>,close)&lt;=<span class="number">0</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)?<span class="macro">false</span>:<span class="macro">true</span>;
+&nbsp;&nbsp;}
+
+</pre>
+
+  <p>‌</p>
+</div>
+<p id="strategy7"><b>Estratégia №7: Donchian Channel em conjunto com o 
+MACD, em que a série de preço é substituída pelos valores do AO de Bill 
+Williams.</b></p>
+<p style="text-align:start;">Para definir um forte movimento 
+unidirecional, é usado o canal Donchian. Assumimos o rompimento do canal
+ como indicador de tendência. Para confirmar a tendência, utilizamos um 
+MACD modificado no qual a série de preço é substituída pelo valor do 
+indicador AO de Bill Williams.</p>
+<table class="standart" style="border-right:1px solid rgb(73, 73, 73); border-top:1px solid rgb(73, 73, 73);" width="75%" cellspacing="0" cellpadding="2">
+  <thead>
+    <tr>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Parâmetros</th>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Descrição</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/2099">Donchian Channel System</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/2391">CronexAO</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Período</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">H1</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de compra</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Rompimento do limite superior do canal de Donchian e nuvem CronexAO de cor azul</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de venda</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Rompimento do limite inferior do canal de Donchian e nuvem CronexAO cor de rosa</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de saída &nbsp;</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Take-Profit/Stop-Loss</td>
+    </tr>
+  </tbody>
+</table>
+<p style="text-align:start;">Na Fig.8, esta estratégia é exibida 
+graficamente. Para facilitar a visualização, foi selecionada uma 
+variante do indicador com mudança na cor de vela, se a vela ultrapassar a
+ borda superior ou inferior do canal Donchian. Ao fazer isto, as cores 
+do CronexAO são escolhidas em conformidade com as cores das velas que 
+ultrapassam as bordas do canal.</p>
+<p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/008__1.png" title="" alt="" style="border-width:0px; max-width:100%; vertical-align:middle;" width="750" height="480">‌</p>
+<p style="text-align:center;"><span class="small">Fig.8 Condições de entrada segundo a estratégia de tendência №7</span></p>
+<p style="text-align:start;">Ao implementar esta estratégia, é 
+importante que, no Donchian Channel System, para os extremos sejam 
+usados os valores High e Low de velas. No entanto, se o instrumento é 
+caraterizado pelos aumentos repentinos do preço - quer numa quer noutra 
+direção (sombras longas de vela) - e o subsequente retorno para valores 
+médios, então, faz sentido usar como extremos os valores ora Open ou 
+Close das velas, ora Open+High/Open+Low em conjunto. Assim o efeito das 
+sombras longas será reduzido.&nbsp;</p>
+<pre class="code"><span class="keyword">void</span> <span class="functions">OnTick</span>()
+&nbsp;&nbsp;{
+<span class="comment">//--- Verificação de ordens abertas anteriormente pelo EA</span>
+&nbsp;&nbsp; <span class="keyword">if</span>(!Trade.IsOpened(Inp_MagicNum))
+&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Obtenção de dados para cálculo</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(!GetIndValue())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="keyword">return</span>;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de compra</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(BuySignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.BuyPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de venda</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(SellSignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.SellPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de compra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> BuySignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(cao_fast[<span class="number">0</span>]&gt;cao_slow[<span class="number">0</span>] &amp;&amp; close[<span class="number">0</span>]&gt;dcs_up[<span class="number">0</span>])?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de venda&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> SellSignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(cao_fast[<span class="number">0</span>]&lt;cao_slow[<span class="number">0</span>] &amp;&amp; close[<span class="number">0</span>]&lt;dcs_low[<span class="number">0</span>])?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Obtenção dos valores atuais dos indicadores&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> GetIndValue()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(<span class="functions">CopyBuffer</span>(InpInd_Handle1,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,dcs_up)&lt;=<span class="number">0</span> ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyBuffer</span>(InpInd_Handle1,<span class="number">1</span>,<span class="number">0</span>,<span class="number">2</span>,dcs_low)&lt;=<span class="number">0</span> || 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyBuffer</span>(InpInd_Handle2,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,cao_fast)&lt;=<span class="number">0</span> ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyBuffer</span>(InpInd_Handle2,<span class="number">1</span>,<span class="number">0</span>,<span class="number">2</span>,cao_slow)&lt;=<span class="number">0</span> ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyClose</span>(<span class="functions">Symbol</span>(),<span class="macro">PERIOD_CURRENT</span>,<span class="number">0</span>,<span class="number">2</span>,close)&lt;=<span class="number">0</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)?<span class="macro">false</span>:<span class="macro">true</span>;
+&nbsp;&nbsp;}
+
+</pre>
+
+<p style="text-align:start;">‌</p>
+<p id="strategy8"><b>Estratégia №8: Oscilador cíclico Schaff com confirmação segundo três níveis Tirone.</b></p>
+<p style="text-align:start;">Nesta estratégia de tendência, é aplicado o
+ oscilador cíclico Shaff nos momentos de sua saída das zonas de 
+sobrevenda/sobrecompra. Para verificação, são utilizados três níveis de 
+Tirone. Foram obtidos resultados interessantes nos timeframes maiores. 
+Para teste, foi selecionado H4.</p>
+<table class="standart" style="border-right:1px solid rgb(73, 73, 73); border-top:1px solid rgb(73, 73, 73);" width="75%" cellspacing="0" cellpadding="2">
+  <thead>
+    <tr>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Parâmetros</th>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Descrição</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/486">Schaff Trend Cycle</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/457">Três nível Tirone</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Período</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">H4</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de compra</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Saída da zona de sobrevenda, enquanto o preço atual deve estar acima do nível Tirone superior.</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de venda</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Saída da zona de sobrecompra, enquanto o preço atual deve estar acima do nível Tirone inferior.</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de saída &nbsp;</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Take-Profit/Stop-Loss</td>
+    </tr>
+  </tbody>
+</table>
+<p style="text-align:start;">A representação gráfica desta estratégia tendência pode ser vista na Fig.9.</p>
+<p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/009__1.png" title="" alt="" style="border-width:0px; max-width:100%; vertical-align:middle;" width="750" height="480">‌</p>
+<p style="text-align:center;"><span class="small"><span>Fig.9 Condições de entrada segundo a estratégia de tendência №8</span></span></p>
+<p style="text-align:left;">Ao discutir a implementação desta estratégia, gostaria de notar que, além dos parâmetros básicos dos dois indicadores, <span style="background-color:rgb(177, 210, 143);">era necessário adicionar os valores numéricos dos níveis de sobrevenda/sobrecompra.</span> Não me dei à tarefa de mudá-los colocando por padrão 20 e 80. <span style="background-color:rgb(255, 242, 153);">No entanto alterei as configurações de suavização e os períodos </span>(na
+ figura pode ser visto no canto superior esquerdo do indicador Schaff). 
+Estas configurações são opcionais, você pode aplicar quer as 
+configurações por padrão quer suas próprias.</p>
+<pre class="code"><span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Parâmetros de entrada do Expert Advisor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">input</span> <span class="keyword">string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Inp_EaComment=<span class="string">"Strategy #8"</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; <span class="comment">//EA Comment</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Inp_Lot=<span class="number">0.01</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <span class="comment">//Lot</span>
+<span class="keyword">input</span> MarginMode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Inp_MMode=LOT;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <span class="comment">//MM</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_MagicNum=<span class="number">1111</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <span class="comment">//Magic number</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_StopLoss=<span class="number">400</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <span class="comment">//Stop Loss(points)</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_TakeProfit=<span class="number">600</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<span class="comment">//Take Profit(points)</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_Deviation = <span class="number">20</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<span class="comment">//Deviation(points)</span>
+
+<span style="background-color:rgb(177, 210, 143);"><span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Overbuying=<span class="number">80</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <span class="comment">//Overbuying zone</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Overselling=<span class="number">20</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <span class="comment">//Overselling zone</span></span>
+<span class="comment">//--- Parâmetros do indicador Schaff Trend Cycle</span>
+
+<span style="background-color:rgb(255, 242, 153);"><span class="keyword">input</span> Smooth_Method&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MA_SMethod=MODE_SMMA_;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <span class="comment">//Histogram smoothing method</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fast_XMA = <span class="number">20</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <span class="comment">//Fast moving average period</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Slow_XMA = <span class="number">30</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <span class="comment">//Slow moving average period</span></span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SmPhase= <span class="number">100</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; <span class="comment">//Moving averages smoothing parameter</span>
+<span class="keyword">input</span> Applied_price_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AppliedPrice=PRICE_CLOSE_;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <span class="comment">//Price constant</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cycle=<span class="number">10</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <span class="comment">//Stochastic oscillator period</span>
+</pre>
+
+<p style="text-align:left;">Essência da estratégia:</p>
+<pre class="code"><span class="keyword">void</span> <span class="functions">OnTick</span>()
+&nbsp;&nbsp;{
+<span class="comment">//--- Verificação de ordens abertas anteriormente pelo EA</span>
+&nbsp;&nbsp; <span class="keyword">if</span>(!Trade.IsOpened(Inp_MagicNum))
+&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Obtenção de dados para cálculo</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(!GetIndValue())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="keyword">return</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de compra</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(BuySignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.BuyPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de venda</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(SellSignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.SellPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de compra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> BuySignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(schaff[<span class="number">1</span>]&lt;Overselling &amp;&amp; schaff[<span class="number">0</span>]&gt;Overselling &amp;&amp; close[<span class="number">0</span>]&gt;tirone_b[<span class="number">0</span>])?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de venda&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> SellSignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(schaff[<span class="number">1</span>]&gt;Overbuying &amp;&amp; schaff[<span class="number">0</span>]&lt;Overbuying &amp;&amp; close[<span class="number">0</span>]&lt;tirone_s[<span class="number">0</span>])?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Obtenção dos valores atuais dos indicadores&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> GetIndValue()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(<span class="functions">CopyBuffer</span>(InpInd_Handle1,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,schaff)&lt;=<span class="number">0</span> ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyBuffer</span>(InpInd_Handle2,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,tirone_b)&lt;=<span class="number">0</span> ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyBuffer</span>(InpInd_Handle2,<span class="number">2</span>,<span class="number">0</span>,<span class="number">2</span>,tirone_s)&lt;=<span class="number">0</span> ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyClose</span>(<span class="functions">Symbol</span>(),<span class="macro">PERIOD_CURRENT</span>,<span class="number">0</span>,<span class="number">2</span>,close)&lt;=<span class="number">0</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)?<span class="macro">false</span>:<span class="macro">true</span>;
+&nbsp;&nbsp;}
+
+</pre>
+
+<p style="text-align:left;">‌</p>
+<p id="strategy9"><b>Estratégia №9: Canal Keltner como um histograma e indicador iTrend na forma de nuvem.</b></p>
+<p style="text-align:left;">Aqui o identificador da tendência é o 
+i-KlPrice com base no canal Keltner sob a forma de histograma. 
+Confirmaremos a tendência usando o indicador iTrend sob a forma de 
+nuvem, nele a cor e a largura da nuvem caraterizam a tendência atual. 
+Como na estratégia anterior, estamos lidando com um tipo de sinal na 
+transição de um determinado nível. Para o i-KlPrice, trata-se dos 
+valores 50 e -50, definidos por padrão. É por isto que faz sentido 
+adicionar - nas configurações do futuro EA - os parâmetros BuyLevel e 
+SellLevel, cujas transições serão um sinal de compra ou venda.</p>
+<p style="text-align:left;">O indicador iTrend responderá pela 
+confirmação do sinal. Nele, acompanharemos a cor da nuvem que é 
+determinada pelos valores de duas linhas. A superior é a diferença do 
+valor suavizado do preço e uma das bandas de Bollinger selecionadas nas 
+configurações. A inferior é a diferença da soma (High + Low) e o valor 
+da média móvel da vela atual multiplicada por -1.‌</p>
+<table class="standart" style="border-right:1px solid rgb(73, 73, 73); border-top:1px solid rgb(73, 73, 73);" width="75%" cellspacing="0" cellpadding="2">
+  <thead>
+    <tr>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Parâmetros</th>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Descrição</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/1352">i-KlPrice</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/2002">iTrend</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Período</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">H1</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de compra</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Valor do histograma i-KlPrice acima do BuyLevel, e nuvem iTend verde.</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de venda</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Valor do histograma i-KlPrice abaixo do BuyLevel, e nuvem iTend rosa.</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de saída &nbsp;</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Take-Profit/Stop-Loss</td>
+    </tr>
+  </tbody>
+</table>
+<p style="text-align:start;">A Fig.10 são ilustrados graficamente exemplos de pontos de entrada para esta estratégia de tendência.</p>
+<p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/010.png" title="" alt="" style="border-width:0px; max-width:100%; vertical-align:middle;" width="750" height="480">‌</p>
+<p style="text-align:center;"><span class="small">Fig.10 Condições de entrada segundo a estratégia de tendência №9</span></p>
+<p style="text-align:left;">‌‌</p>
+<p style="text-align:left;">Eu desenvolvi esta estratégia no meu código assim:</p>
+<pre class="code"><span class="keyword">void</span> <span class="functions">OnTick</span>()
+&nbsp;&nbsp;{
+<span class="comment">//--- Verificação de ordens abertas anteriormente pelo EA</span>
+&nbsp;&nbsp; <span class="keyword">if</span>(!Trade.IsOpened(Inp_MagicNum))
+&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Obtenção de dados para cálculo</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(!GetIndValue())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="keyword">return</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de compra</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(BuySignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.BuyPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de venda</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(SellSignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.SellPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de compra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> BuySignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(klprice[<span class="number">0</span>]&gt;BuyLevel &amp;&amp; itrend_h[<span class="number">0</span>]&gt;itrend_l[<span class="number">0</span>])?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de venda&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> SellSignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(klprice[<span class="number">0</span>]&lt;SellLevel &amp;&amp; itrend_h[<span class="number">0</span>]&lt;itrend_l[<span class="number">0</span>])?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Obtenção dos valores atuais dos indicadores&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> GetIndValue()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(<span class="functions">CopyBuffer</span>(InpInd_Handle1,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,klprice)&lt;=<span class="number">0</span> ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyBuffer</span>(InpInd_Handle2,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,itrend_h)&lt;=<span class="number">0</span> ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyBuffer</span>(InpInd_Handle2,<span class="number">1</span>,<span class="number">0</span>,<span class="number">2</span>,itrend_l)&lt;=<span class="number">0</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)?<span class="macro">false</span>:<span class="macro">true</span>;
+&nbsp;&nbsp;}
+
+
+</pre>
+
+<p style="text-align:left;">‌</p>
+<p id="strategy10"><b>Estratégia №10: Impulso de preço Average Change e leque de médias móveis FigurelliSeries.</b></p>
+<p style="text-align:left;">E, finalmente, a variante com pesquisa da 
+tendência com a ajuda do indicador Average Change. O FigurelliSeries sob
+ a forma de um histograma será a confirmação do impulso. Para o Average 
+Change, o valor base - a partir do qual parte o sinal do impulso do 
+preço para cima ou para baixo - é igual a um. Portanto, a condição de 
+entrada para esta estratégia consiste na transição do valor do indicador
+ através de 1. Para entender as leituras do indicador FigurelliSeries, é
+ necessário estudar seu algoritmo e parâmetros de entrada:</p>
+<pre class="code"><span class="comment" style="color:gray;">//+----------------------------------------------+</span>
+<span class="comment" style="color:gray;">//| Indicator input parameters&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment" style="color:gray;">//+----------------------------------------------+</span>
+<span class="keyword" style="color:rgb(0, 0, 255);">input</span> <span class="keyword" style="color:rgb(0, 0, 255);">uint</span> StartPeriod=<span class="number" style="color:rgb(0, 128, 0);">6</span>;&nbsp;&nbsp;                            <span class="comment" style="color:gray;">// initial period</span>
+<span class="keyword" style="color:rgb(0, 0, 255);">input</span> <span class="keyword" style="color:rgb(0, 0, 255);">uint</span> Step=<span class="number" style="color:rgb(0, 128, 0);">6</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                             <span class="comment" style="color:gray;">// periods calculation step</span>
+<span class="keyword" style="color:rgb(0, 0, 255);">input</span> <span class="keyword" style="color:rgb(0, 0, 255);">uint</span> Total=<span class="number" style="color:rgb(0, 128, 0);">36</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                   &nbsp; <span class="comment" style="color:gray;">         // number of Moving Averages</span>
+<span class="keyword" style="color:rgb(0, 0, 255);">input</span>&nbsp;&nbsp;<span class="macro" style="color:rgb(51, 51, 153);">ENUM_MA_METHOD</span>&nbsp;&nbsp; MAType=<span class="macro" style="color:rgb(51, 51, 153);">MODE_EMA</span>;               <span class="comment" style="color:gray;">// Moving Averages smoothing type</span>
+<span class="keyword" style="color:rgb(0, 0, 255);">input</span> <span class="macro" style="color:rgb(51, 51, 153);">ENUM_APPLIED_PRICE</span>&nbsp;&nbsp; MAPrice=<span class="macro" style="color:rgb(51, 51, 153);">PRICE_CLOSE</span>;        <span class="comment" style="color:gray;">// price timeseries of Moving Averages</span>
+<span class="keyword" style="color:rgb(0, 0, 255);">input</span> <span class="keyword" style="color:rgb(0, 0, 255);">int</span> Shift=<span class="number" style="color:rgb(0, 128, 0);">0</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                  &nbsp;          &nbsp; <span class="comment" style="color:gray;">// Horizontal shift of the indicator in bars </span>
+</pre>
+
+<p style="text-align:left;">É definido o período inicial da média móvel 
+StartPeriod e, em seguida, também 36 médias com período igual ao inicial
+ mais Step. A seguir, selecionamos o tipo de MA e o preço a ser 
+aplicado. Em geral, este é um leque de MA cujos valores são comparados 
+com o preço de fechamento atual. O valor do histograma é a <span style="background-color:rgb(255, 246, 200);">diferença entre a quantidade de MA acima e abaixo do preço de fechamento</span>:</p>
+<pre class="code"><span class="comment" style="color:gray;">//---- main cycle of calculation of the indicator</span>
+&nbsp;&nbsp; <span class="keyword" style="color:rgb(0, 0, 255);">for</span>(bar=limit; bar&gt;=<span class="number" style="color:rgb(0, 128, 0);">0</span> &amp;&amp; !<span class="functions" style="color:rgb(138, 43, 226);">IsStopped</span>(); bar--)
+&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword" style="color:rgb(0, 0, 255);">double</span> tot_Ask=<span class="number" style="color:rgb(0, 128, 0);">0</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword" style="color:rgb(0, 0, 255);">double</span> tot_Bid=<span class="number" style="color:rgb(0, 128, 0);">0</span>;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword" style="color:rgb(0, 0, 255);">for</span>(<span class="keyword" style="color:rgb(0, 0, 255);">int</span> count=<span class="number" style="color:rgb(0, 128, 0);">0</span>; count&lt;<span class="keyword" style="color:rgb(0, 0, 255);">int</span>(Total); count++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment" style="color:gray;">//---- copy newly appeared data into the arrays</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="keyword" style="color:rgb(0, 0, 255);">if</span>(<span class="functions" style="color:rgb(138, 43, 226);">CopyBuffer</span>(MA_Handle[count],<span class="number" style="color:rgb(0, 128, 0);">0</span>,bar,<span class="number" style="color:rgb(0, 128, 0);">1</span>,MA)&lt;=<span class="number" style="color:rgb(0, 128, 0);">0</span>) <span class="keyword" style="color:rgb(0, 0, 255);">return</span>(RESET);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="keyword" style="color:rgb(0, 0, 255);">if</span>(close[bar]&lt;MA[<span class="number" style="color:rgb(0, 128, 0);">0</span>]) tot_Ask++;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="keyword" style="color:rgb(0, 0, 255);">if</span>(close[bar]&gt;MA[<span class="number" style="color:rgb(0, 128, 0);">0</span>]) tot_Bid++;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color:rgb(255, 246, 200);">IndBuffer[bar]=tot_Bid-tot_Ask;</span>
+&nbsp;&nbsp;&nbsp;&nbsp; }
+</pre>
+
+<p style="text-align:left;">Resumindo os princípios de ambos os indicadores, compomos as regras de entrada:<br>
+</p>
+<table class="standart" style="border-right:1px solid rgb(73, 73, 73); border-top:1px solid rgb(73, 73, 73);" width="75%" cellspacing="0" cellpadding="2">
+  <thead>
+    <tr>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Parâmetros</th>
+      <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Descrição</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/1446">Average Change</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Indicador utilizado</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);"><a href="https://www.mql5.com/pt/code/1608">Figurelli Series</a></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Período</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">H4</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de compra</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">O Average Change atravessa para cima o limiar, e o valor do histograma Figurelli Series acima de zero.</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de venda</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">O Average Change atravessa para baixo o limiar, e o valor do histograma Figurelli Series abaixo de zero.</td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Condições de saída &nbsp;</td>
+      <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Take-Profit/Stop-Loss</td>
+    </tr>
+  </tbody>
+</table>
+<p style="text-align:left;">A Fig.11 apresenta exemplos de entrada no mercado das estratégias consideradas:</p>
+<p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/011.png" title="" alt="" style="border-width:0px; max-width:100%; vertical-align:middle;" width="750" height="480"></p>
+<p style="text-align:center;"><span class="small">Fig.11 Condições de entrada segundo a estratégia de tendência №10</span><br>
+</p>
+<p style="text-align:left;">Código da estratégia:</p>
+<pre class="code"><span class="keyword">void</span> <span class="functions">OnTick</span>()
+&nbsp;&nbsp;{
+<span class="comment">//--- Verificação de ordens abertas anteriormente pelo EA</span>
+&nbsp;&nbsp; <span class="keyword">if</span>(!Trade.IsOpened(Inp_MagicNum))
+&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Obtenção de dados para cálculo</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(!GetIndValue())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="keyword">return</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de compra</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(BuySignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.BuyPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//--- Abertura de ordem se houver um sinal de venda</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>(SellSignal())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trade.SellPositionOpen(<span class="macro">true</span>,<span class="functions">Symbol</span>(),Inp_Lot,Inp_MMode,Inp_Deviation,Inp_StopLoss,Inp_TakeProfit,Inp_MagicNum,Inp_EaComment);
+&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de compra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> BuySignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(avr_change[<span class="number">1</span>]&lt;<span class="number">1</span> &amp;&amp; avr_change[<span class="number">0</span>]&gt;<span class="number">1</span> &amp;&amp; fig_series[<span class="number">0</span>]&gt;<span class="number">0</span>)?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Condições de venda&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> SellSignal()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(avr_change[<span class="number">1</span>]&gt;<span class="number">1</span> &amp;&amp; avr_change[<span class="number">0</span>]&lt;<span class="number">1</span> &amp;&amp; fig_series[<span class="number">0</span>]&lt;<span class="number">0</span>)?<span class="macro">true</span>:<span class="macro">false</span>;
+&nbsp;&nbsp;}
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="comment">//| Obtenção dos valores atuais dos indicadores&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span>
+<span class="comment">//+------------------------------------------------------------------+</span>
+<span class="keyword">bool</span> GetIndValue()
+&nbsp;&nbsp;{
+&nbsp;&nbsp; <span class="keyword">return</span>(<span class="functions">CopyBuffer</span>(InpInd_Handle1,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,avr_change)&lt;=<span class="number">0</span> ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="functions">CopyBuffer</span>(InpInd_Handle2,<span class="number">0</span>,<span class="number">0</span>,<span class="number">2</span>,fig_series)&lt;=<span class="number">0</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)?<span class="macro">false</span>:<span class="macro">true</span>;
+&nbsp;&nbsp;}
+
+</pre>
+
+<br>
+<p style="text-align:left;">‌</p>
+<h3 id="tests">Teste</h3>
+<p>Assim, na seção anterior, formalizamos 10 estratégias de tendência e 
+escrevemos seu código. Para testar e comparar os resultados obtidos, é 
+preciso escolher as mesmas condições e modos de teste.</p>
+<ul>
+  <li>Intervalo:&nbsp;<b>01.01.2016 — 01.03.2017&nbsp;</b>.</li>
+  <li>Par de moedas:&nbsp;<b>EURUSD</b>.</li>
+  <li>Modo de negociação:&nbsp;<b>Sem latência. </b> As estratégias apresentadas não estão relacionadas com as de alta frequência, de modo que o impacto do atraso é muito pequeno. <br>
+  </li>
+  <li>Teste:&nbsp;<b>OHLC em М1.</b> Os testes preliminares em ticks reais resultaram quase indistinguíveis deste regime. <br>
+  </li>
+  <li>Depósito inicial:&nbsp;<b>1000 USD.</b></li>
+  <li>Alavancagem:&nbsp;<b>1:500.</b></li>
+  <li>Servidor:<b>&nbsp;MetaQuotes-Demo.</b></li>
+  <li>Cotações:<b> 5 dígitos.</b></li>
+</ul>
+<p>Praticamente todas as estratégias nas quais o Take-Profit/Stop-Loss é
+ a condição de saída, e у 8 de 10 timeframes em execução é o 1H. 
+Portanto, para eles, é possível tomar as mesmos alvos de lucro e de 
+perda. Definimos o Take-Profit em <b>600</b> (cotações de 5 dígitos), Stop-Loss em <b>400</b>.‌
+ Para maior clareza, além das condições especificadas acima, definimos, 
+quanto ao teste, a pré-instalação dos parâmetros dos indicadores que são
+ usados nas estratégias.</p>
+<p><b>Teste de Estratégia №1 (Indicador ADXCloud com RSI de confirmação sob a forma de histograma). </b><br>
+</p>
+<p>Pré-instalação:</p>
+
+     <div>
+      <pre class="code"><span class="comment">//--- Parâmetros do indicador RSI_Color</span>
+
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_RSIPeriod=<span class="number">11</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//RSI Period</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Inp_Overbuying=<span class="number">70</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Overuying zone</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Inp_Overselling=<span class="number">30</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Overselling zone</span>
+<span class="comment">//--- Parâmetros do indicador ADX_Cloud</span>
+
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_ADXPeriod=<span class="number">8</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//ADX Period</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Inp_alpha1 = <span class="number">0.25</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//alpha1</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Inp_alpha2 = <span class="number">0.25</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//alpha2</span>
+</pre>
+
+    </div>
+ 
+<p>Resultado do teste:</p>
+
+ 
+    <div>
+      <p style="text-align:center;">‌<img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/1__1.gif" title="" alt="" style="vertical-align:middle;" width="736" height="422"></p><p><br></p><p></p>
+      <p style="text-align:center;"><span class="small">Fig.12. Resultados do teste da estratégia de tendência №1</span></p>
+    </div>
+  
+
+<p style="text-align:left;"><b>Teste de Estratégia №2 (</b><b>Indicador de tendência Standard Deviation sob a forma de histograma com confirmação do RVI).</b></p>
+<div>
+  <p style="text-align:left;">Pré-instalação:‌</p>
+  <pre class="code"><span class="comment">//--- Parâmetros do indicador ColorStDev</span>
+
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;period = <span class="number">12</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <span class="comment">//Smoothing period StDev</span>
+<span class="keyword">input</span> <span class="macro">ENUM_MA_METHOD</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MA_Method=<span class="macro">MODE_EMA</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <span class="comment">//Histogram smoothing method</span>
+<span class="keyword">input</span> <span class="macro">ENUM_APPLIED_PRICE</span>&nbsp;&nbsp; applied_price=<span class="macro">PRICE_CLOSE</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <span class="comment">//Applied price</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MaxTrendLevel=<span class="number">90</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; <span class="comment">//Maximum trend level</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MiddLeTrendLevel=<span class="number">50</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; <span class="comment">//Middle trend level</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FlatLevel=<span class="number">20</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<span class="comment">//Flat level</span>
+<span class="keyword">input</span> Trend&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TrendLevel=Maximum;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<span class="comment">//Used trend</span>
+<span class="comment">//--- Parâmetros do indicador ColorZerolagRVI</span>
+
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; smoothing=<span class="number">15</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<span class="comment">//Smoothing period RVI</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Factor1=<span class="number">0.05</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<span class="comment">//Weight coef.1</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RVI_period1=<span class="number">14</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<span class="comment">//RVI Period 1</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Factor2=<span class="number">0.10</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<span class="comment">//Weight coef.2</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RVI_period2=<span class="number">28</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//RVI Period 2</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Factor3=<span class="number">0.16</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<span class="comment">//Weight coef.3</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RVI_period3=<span class="number">45</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; <span class="comment">//RVI Period 3</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Factor4=<span class="number">0.26</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<span class="comment">//Weight coef.4</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RVI_period4=<span class="number">65</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<span class="comment">//RVI Period 4</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Factor5=<span class="number">0.43</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; <span class="comment">//Weight coef.5</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RVI_period5=<span class="number">75</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; <span class="comment">//RVI Period 5
+</span>
+</pre>
+
+</div>
+
+<p style="text-align:start;">Resultado do teste:</p>
+<p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/2__1.gif" title="" alt="" style="vertical-align:middle;" width="736" height="422">‌</p>
+<p style="text-align:center;"><span class="small">Fig.13. Resultados do teste da estratégia de tendência №2</span></p>
+<p style="text-align:left;"><b>Teste de Estratégia №3 (</b><b>Interpretação de nuvem do AC de Bill Williams e Bears Power e Bulls Power combinados).</b></p>
+<div>
+  <p style="text-align:start;">Pré-instalação:‌</p>
+  <pre class="code"><span class="comment">//--- Parâmetros do indicador Bears_Bull_power</span>
+
+<span class="keyword">input</span> Smooth_Method&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MA_Method1=MODE_AMA;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Averaging method</span>
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Length1=<span class="number">12</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Averaging depth&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Phase1=<span class="number">15</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Averaging parameter</span>
+<span class="keyword">input</span> Smooth_Method&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MA_Method2=MODE_ParMA;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Smoothing period</span>
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Length2=<span class="number">5</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Smoothing depth</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Phase2=<span class="number">15</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Smoothing parameter</span>
+<span class="keyword">input</span> Applied_price_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IPC=PRICE_WEIGHTED_;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Applied price</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Shift=<span class="number">0</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Shift</span>
+<span class="comment">//--- Parâmetros do indicador CronexAC</span>
+
+<span class="keyword">input</span> Smooth_Method&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XMA_Method=MODE_SMMA_;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Smoothing Method</span>
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FastPeriod=<span class="number">9</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Fast smoothing period</span>
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SlowPeriod=<span class="number">21</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Slow smoothing period</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XPhase=<span class="number">15</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Smoothing parameter</span>
+</pre>
+
+  <p style="text-align:start;">Resultado do teste:</p>
+  <p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/3__1.gif" title="" alt="" style="vertical-align:middle;" width="736" height="422">‌</p>
+  <p style="text-align:center;"><span class="small">Fig.14. Resultados do teste da estratégia de tendência №3</span></p>
+  <p style="text-align:left;"><b>Teste de Estratégia&nbsp;№4 (</b><b>Centro de gravidade J. F. Ehlers confirmado pleo indicador de celeridade do preço).</b></p>
+  <p style="text-align:left;">Pré-instalação:‌</p>
+  <pre class="code"><span class="comment">//--- Parâmetros do indicador CenterOfGravityOSMA</span>
+
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Period_=<span class="number">9</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Averaging period</span>
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SmoothPeriod1=<span class="number">3</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Smoothing period1</span>
+<span class="keyword">input</span> <span class="macro">ENUM_MA_METHOD</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MA_Method_1=<span class="macro">MODE_SMA</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Averaging method1</span>
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SmoothPeriod2=<span class="number">3</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Smoothing period2</span>
+<span class="keyword">input</span> <span class="macro">ENUM_MA_METHOD</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MA_Method_2=<span class="macro">MODE_SMA</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Averaging method2</span>
+<span class="keyword">input</span> Applied_price_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AppliedPrice=PRICE_OPEN_;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Applied price</span>
+<span class="comment">//--- Parâmetros do indicador Average Speed</span>
+
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_Bars=<span class="number">1</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Days</span>
+<span class="keyword">input</span> <span class="macro">ENUM_APPLIED_PRICE</span>&nbsp;&nbsp; Price=<span class="macro">PRICE_CLOSE</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Applied price</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trend_lev=<span class="number">2</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Trend Level</span>
+</pre>
+
+  <p style="text-align:left;">Resultado do teste:</p>
+  <p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/4__1.gif" title="" alt="" style="vertical-align:middle;" width="736" height="422">‌</p>
+  <p style="text-align:center;"><span class="small">Fig.15. Resultados do teste da estratégia de tendência №4</span></p>
+  <p style="text-align:left;"><b>Teste de Estratégia&nbsp;№5 (</b><b>Indicador integrado Onda Binária).</b></p>
+  <div style="margin:0px; padding:0px;">
+    <p style="text-align:start;">Pré-instalação:</p>
+    <pre class="code"><span class="comment">//--- Parâmetros do indicador Binary_Wave</span>
+
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WeightMA&nbsp;&nbsp;&nbsp;&nbsp;= <span class="number">1.0</span>;
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WeightMACD&nbsp;&nbsp;= <span class="number">1.0</span>;
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WeightOsMA&nbsp;&nbsp;= <span class="number">1.0</span>;
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WeightCCI&nbsp;&nbsp; = <span class="number">1.0</span>;
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WeightMOM&nbsp;&nbsp; = <span class="number">1.0</span>;
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WeightRSI&nbsp;&nbsp; = <span class="number">1.0</span>;
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WeightADX&nbsp;&nbsp; = <span class="number">1.0</span>;
+<span class="comment">//---- Moving Average</span>
+
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MAPeriod=<span class="number">10</span>;
+<span class="keyword">input</span> <span class="macro">ENUM_MA_METHOD</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MAType=<span class="macro">MODE_EMA</span>;
+<span class="keyword">input</span> <span class="macro">ENUM_APPLIED_PRICE</span>&nbsp;&nbsp; MAPrice=<span class="macro">PRICE_CLOSE</span>;
+<span class="comment">//---- MACD</span>
+
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FastMACD&nbsp;&nbsp;&nbsp;&nbsp; = <span class="number">12</span>;
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SlowMACD&nbsp;&nbsp;&nbsp;&nbsp; = <span class="number">26</span>;
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SignalMACD&nbsp;&nbsp; = <span class="number">9</span>;
+<span class="keyword">input</span> <span class="macro">ENUM_APPLIED_PRICE</span>&nbsp;&nbsp; PriceMACD=<span class="macro">PRICE_CLOSE</span>;
+<span class="comment">//---- OsMA</span>
+
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FastPeriod&nbsp;&nbsp; = <span class="number">12</span>;
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SlowPeriod&nbsp;&nbsp; = <span class="number">26</span>;
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SignalPeriod = <span class="number">9</span>;
+<span class="keyword">input</span> <span class="macro">ENUM_APPLIED_PRICE</span>&nbsp;&nbsp; OsMAPrice=<span class="macro">PRICE_CLOSE</span>;
+<span class="comment">//---- CCI</span>
+
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CCIPeriod=<span class="number">10</span>;
+<span class="keyword">input</span> <span class="macro">ENUM_APPLIED_PRICE</span>&nbsp;&nbsp; CCIPrice=<span class="macro">PRICE_MEDIAN</span>;
+<span class="comment">//---- Momentum</span>
+
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOMPeriod=<span class="number">14</span>;
+<span class="keyword">input</span> <span class="macro">ENUM_APPLIED_PRICE</span>&nbsp;&nbsp; MOMPrice=<span class="macro">PRICE_CLOSE</span>;
+<span class="comment">//---- RSI</span>
+
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RSIPeriod=<span class="number">14</span>;
+<span class="keyword">input</span> <span class="macro">ENUM_APPLIED_PRICE</span>&nbsp;&nbsp; RSIPrice=<span class="macro">PRICE_CLOSE</span>;
+<span class="comment">//---- ADX</span>
+
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADXPeriod=<span class="number">10</span>;
+</pre>
+
+    <p style="text-align:start;">Resultado do teste:</p>
+    <p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/5__1.gif" title="" alt="" style="vertical-align:middle;" width="736" height="422"><br></p>
+    <p style="text-align:center;"><span class="small">Fig.16. Resultados do teste da estratégia de tendência №5</span></p>
+    <p style="text-align:left;"><b>Teste de Estratégia №6 (</b><b>Indicador integrado Weight Oscillator em conjunto com LeMan Objective).</b></p>
+    <p style="text-align:left;">Pré-instalação:</p>
+    <pre class="code"><span class="comment">//--- Parâmetros do indicador LeMan Objective</span>
+
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sample=<span class="number">20</span>;
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quartile_1 = <span class="number">25</span>;
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quartile_2 = <span class="number">50</span>;
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quartile_3 = <span class="number">75</span>;
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Shift=<span class="number">0</span>;
+<span class="comment">//--- Parâmetros do indicador Weight Oscillator</span>
+<span class="comment">//---- RSI</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RSIWeight=<span class="number">1.0</span>;
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RSIPeriod=<span class="number">14</span>;
+<span class="keyword">input</span> <span class="macro">ENUM_APPLIED_PRICE</span>&nbsp;&nbsp; RSIPrice=<span class="macro">PRICE_CLOSE</span>;
+<span class="comment">//---- MFI</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MFIWeight=<span class="number">1.0</span>;
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MFIPeriod=<span class="number">14</span>;
+<span class="keyword">input</span> <span class="macro">ENUM_APPLIED_VOLUME</span>&nbsp;&nbsp;MFIVolumeType=<span class="macro">VOLUME_TICK</span>;
+<span class="comment">//---- WPR</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WPRWeight=<span class="number">1.0</span>;
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WPRPeriod=<span class="number">12</span>;
+<span class="comment">//---- DeMarker</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DeMarkerWeight=<span class="number">1.0</span>;
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DeMarkerPeriod=<span class="number">10</span>;
+<span class="comment">//----</span>
+<span class="keyword">input</span> Smooth_Method&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bMA_Method=MODE_SMMA_;
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bLength=<span class="number">5</span>;
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bPhase=<span class="number">100</span>;
+</pre>
+
+    <p style="text-align:left;">Resultado do teste:</p>
+    <p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/6__1.gif" title="" alt="" style="vertical-align:middle;" width="736" height="422"><br></p>
+    <p style="text-align:center;"><span class="small">Fig.17. Resultados do teste da estratégia de tendência №6</span></p>
+    <p style="text-align:left;"><b>Teste de Estratégia №7 </b><b>(Donchian Channel em conjunto com modificação do MACD, em que a série de preço é substituída pelos valores de Williams.).</b></p>
+    <p style="text-align:left;">Pré-instalação:</p>
+    <pre class="code"><span class="keyword">input</span> <span class="keyword">string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Inp_EaComment=<span class="string">"Strategy #7"</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//EA Comment</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Inp_Lot=<span class="number">0.01</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Lot</span>
+<span class="keyword">input</span> MarginMode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Inp_MMode=LOT;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//MM</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_MagicNum=<span class="number">1111</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Magic number</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_StopLoss=<span class="number">400</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Stop Loss(points)</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_TakeProfit=<span class="number">600</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Take Profit(points)</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_Deviation = <span class="number">20</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Deviation(points)</span>
+<span class="comment">//--- Parâmetros do indicador Donchian Channel System</span>
+
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DonchianPeriod=<span class="number">12</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Period of Averaging</span>
+<span class="keyword">input</span> Applied_Extrem&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Extremes=HIGH_LOW_CLOSE;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Type of Extremum</span>
+
+<span class="comment">//--- Parâmetros do indicador CronexAO</span>
+
+<span class="keyword">input</span> Smooth_Method&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XMA_Method=MODE_ParMA;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Method of Averaging</span>
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FastPeriod=<span class="number">14</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Period of Fast averaging</span>
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SlowPeriod=<span class="number">25</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Period of Flow averaging</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XPhase=<span class="number">15</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Smoothing parameter</span>
+</pre>
+
+    <p style="text-align:left;">Resultado do teste:</p>
+    <p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/7__1.gif" title="" alt="" style="vertical-align:middle;" width="736" height="422"><br></p>
+    <p style="text-align:center;"><span class="small">Fig.18. Resultados do teste da estratégia de tendência №7</span></p>
+    <div><span class="small"><br>
+      </span></div>
+    <p style="text-align:left;"><b>Teste de Estratégia №8 (</b><b>Oscilador cíclico Schaff com confirmação sob a forma de três níveis Tirone).</b></p>
+    <p style="text-align:left;">Pré-instalação:</p>
+    <pre class="code"><span class="keyword">input</span> <span class="keyword">string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Inp_EaComment=<span class="string">"Strategy #8"</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//EA Comment</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Inp_Lot=<span class="number">0.01</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Lot</span>
+<span class="keyword">input</span> MarginMode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Inp_MMode=LOT;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//MM</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_MagicNum=<span class="number">1111</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Magic number</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_StopLoss=<span class="number">400</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Stop Loss(points)</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_TakeProfit=<span class="number">600</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Take Profit(points)</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_Deviation = <span class="number">20</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Deviation(points)</span>
+
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Overbuying=<span class="number">90</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Overbuying zone</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Overselling=<span class="number">15</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Overselling zone</span>
+<span class="comment">//--- Parâmetros do indicador Schaff Trend Cycle</span>
+
+<span class="keyword">input</span> Smooth_Method&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MA_SMethod=MODE_SMMA_;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Histogram smoothing method</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fast_XMA = <span class="number">20</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Fast moving average period</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Slow_XMA = <span class="number">30</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Slow moving average period</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SmPhase= <span class="number">100</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Moving averages smoothing parameter</span>
+<span class="keyword">input</span> Applied_price_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AppliedPrice=PRICE_CLOSE_;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Price constant</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cycle=<span class="number">10</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Stochastic oscillator period</span>
+
+<span class="comment">//--- Parâmetros do indicador Tirone Levels</span>
+
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TirPeriod=<span class="number">13</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Period of the indicator</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Shift=<span class="number">0</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Horizontal shift of the indicator in bars</span>
+</pre>
+
+    <p style="text-align:left;">Resultado do teste:</p>
+    <p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/8__1.gif" title="" alt="" style="vertical-align:middle;" width="736" height="422"><br></p>
+    <p style="text-align:center;"><span class="small">Fig.19. Resultados do teste da estratégia de tendência №8</span></p>
+    <p style="text-align:left;"><b>Teste de Estratégia №9 (</b><b>Canal Keltner como um histograma e indicador iTrend na forma de nuvem).</b></p>
+    <p style="text-align:left;">Pré-instalação:</p>
+    <pre class="code"><span class="keyword">input</span> <span class="keyword">string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Inp_EaComment=<span class="string">"Strategy #9"</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//EA Comment</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Inp_Lot=<span class="number">0.01</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Lot</span>
+<span class="keyword">input</span> MarginMode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Inp_MMode=LOT;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//MM</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_MagicNum=<span class="number">1111</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Magic number</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_StopLoss=<span class="number">400</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Stop Loss(points)</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_TakeProfit=<span class="number">600</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Take Profit(points)</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inp_Deviation = <span class="number">20</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Deviation(points)</span>
+
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BuyLevel=<span class="number">50</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Overbuying zone</span>
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SellLevel=-<span class="number">50</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Overselling zone</span>
+<span class="comment">//--- Parâmetros do indicador i-KlPrice</span>
+
+<span class="keyword">input</span> Smooth_Method&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MA_Method1=MODE_ParMA;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//smoothing method of moving average</span>
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Length1=<span class="number">100</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//smoothing depth of moving average&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Phase1=<span class="number">15</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//moving average smoothing parameter</span>
+
+<span class="keyword">input</span> Smooth_Method&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MA_Method2=MODE_SMMA_;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//candles size smoothing method</span>
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Length2=<span class="number">20</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//smoothing depth of candles size </span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Phase2=<span class="number">100</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//candles size smoothing parameter</span>
+
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Deviation=<span class="number">2.0</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//channel expansion ratio</span>
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Smooth=<span class="number">20</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//indicator smoothing period</span>
+
+<span class="keyword">input</span> Applied_price_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IPC=PRICE_TYPICAL_;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//price constant</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Shift=<span class="number">0</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//horizontal shift of the indicator in bars</span>
+
+<span class="comment">//--- Parâmetros do indicador iTrend</span>
+
+<span class="keyword">input</span> Applied_price_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Price_Type=PRICE_TYPICAL_;
+<span class="comment">//--- Moving Average parameters</span>
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MAPeriod=<span class="number">14</span>;
+<span class="keyword">input</span> <span class="macro">ENUM_MA_METHOD</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  MAType=<span class="macro">MODE_EMA</span>;
+<span class="keyword">input</span> <span class="macro">ENUM_APPLIED_PRICE</span>&nbsp;&nbsp;   MAPrice=<span class="macro">PRICE_CLOSE</span>;
+<span class="comment">//--- Bollinger parameters</span>
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BBPeriod=<span class="number">14</span>;
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; deviation_=<span class="number">2.0</span>;
+<span class="keyword">input</span> <span class="macro">ENUM_APPLIED_PRICE</span>&nbsp;&nbsp;  BBPrice=<span class="macro">PRICE_CLOSE</span>;
+<span class="keyword">input</span> Mode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BBMode=Mode_1;
+</pre>
+
+    <p style="text-align:left;">Resultado do teste:</p>
+    <p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/9__1.gif" title="" alt="" style="vertical-align:middle;" width="736" height="422"><br></p>
+    <p style="text-align:center;"><span class="small">Fig.20. Resultados do teste da estratégia de tendência №9</span></p>
+    <p style="text-align:left;"><b>Teste de Estratégia №10 (</b><b>Impulso de preço Average Change e leque de médias móveis FigurelliSeries.).</b></p>
+    <p style="text-align:left;">Pré-instalação:</p>
+    <pre class="code"><span class="comment">//--- Parâmetros do indicador Average Change</span>
+<span class="keyword">input</span> Smooth_Method&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MA_Method1=MODE_SMMA_;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//smoothing method of moving average</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Length1=<span class="number">12</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//smoothing depth of moving average&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Phase1=<span class="number">15</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//moving average smoothing parameter</span>
+<span class="keyword">input</span> Applied_price_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IPC1=PRICE_CLOSE_;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//moving average price constant</span>
+
+<span class="keyword">input</span> Smooth_Method&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MA_Method2=MODE_EMA_;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//indicator smoothing method</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Length2 = <span class="number">5</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//indicator smoothing depth</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Phase2=<span class="number">100</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//indicator smoothing parameter</span>
+<span class="keyword">input</span> Applied_price_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IPC2=PRICE_CLOSE_;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//price constant for smoothing</span>
+
+<span class="keyword">input</span> <span class="keyword">double</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Pow=<span class="number">5</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//power</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Shift=<span class="number">0</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//horizontal shift of the indicator in bars</span>
+
+<span class="comment">//--- Parâmetros do indicador</span>
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; StartPeriod=<span class="number">6</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//initial period</span>
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Step_=<span class="number">6</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//periods calculation step</span>
+<span class="keyword">input</span> <span class="keyword">uint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total=<span class="number">36</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//number of Moving Averages</span>
+<span class="keyword">input</span> <span class="macro">ENUM_MA_METHOD</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  MAType=<span class="macro">MODE_EMA</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//Moving Averages smoothing type</span>
+<span class="keyword">input</span> <span class="macro">ENUM_APPLIED_PRICE</span>&nbsp;&nbsp;   MAPrice=<span class="macro">PRICE_CLOSE</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">//price timeseries of Moving Averages</span>
+<span class="keyword">input</span> <span class="keyword">int</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Shift1=<span class="number">0</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Horizontal shift of the indicator in bars&nbsp;&nbsp;</span>
+</pre>
+
+    <p style="text-align:left;">Resultado do teste:</p>
+    <p style="text-align:center;"><img src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/10__1.gif" title="" alt="" style="vertical-align:middle;" width="736" height="422"><br></p>
+    <p style="text-align:center;"><span class="small">Fig.21. Resultados do teste da estratégia de tendência №10</span></p>
+    <p style="text-align:center;"><br>
+    </p>
+    <h3 id="conclusions">Conclusões</h3>
+  </div>
+</div>
+<p style="text-align:left;">O teste e a otimização das estratégias de negociação apresentadas mostraram o seguinte. <br>
+</p>
+
+<ul>
+  <li>Na maioria das estratégias, o lucro total foi obtido ao negociar nos movimentos unidirecionais quer fortes quer prolongados.</li>
+  <li>A perda total e os trechos caraterísticos com algumas operações 
+não-rentáveis seguidas foram obtidos ao negociar na fase de correção 
+(plano).<br>
+  </li>
+  <li>Além disso, a causa das perdas em algumas estratégias foi o fato 
+de os parâmetros de Take-Profit e Stop-Loss se tornarem imutáveis.</li>
+  <li>Em alguns casos, a definição da tendência demora muito, por isso foi necessário alterar o timeframe.</li>
+</ul>
+<div>Podemos concluir que, durante o desenvolvimento e teste de 
+estratégias de negociação, foram confirmadas suas vantagens e 
+desvantagens.&nbsp;O bom trabalho nas zonas fortes e prolongadas do 
+mercado é compensado pelo insucesso na exibição de resultados na fase de
+ correção ou no movimento lateral. Portanto, a coisa mais importante que
+ descobrimos é que <b>não há grande diferença em como determinar a 
+tendência atual. Vantagens e desvantagens de todas as estratégias de 
+negociação serão as mesmas</b>.</div>
+
+<h3 id="end">Conclusão</h3>
+<p style="text-align:justify;">Abaixo está uma tabela de resumo com os 
+nomes dos Expert Advisors desenvolvidos e usados no artigo, bem como as 
+classes auxiliares e a lista de indicadores que foram utilizados nas 
+atuais estratégias de tendência. No final do artigo é anexado um arquivo
+ com todos os ficheiros listados, classificados em pastas. Portanto, 
+para uma correta operação é suficiente colocar a pasta <b>MQL5</b> na raiz do terminal.</p>
+
+<p style="text-align:justify;"><b>Programas utilizados no artigo:</b></p>
+<div>
+  <table class="standart" style="border-right:1px solid rgb(73, 73, 73); border-top:1px solid rgb(73, 73, 73);" width="100%" cellspacing="0" cellpadding="3">
+    <thead>
+      <tr>
+        <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">#<br></th>
+        <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">&nbsp;Nome<br></th>
+        <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Tipo<br></th>
+        <th style="background-color:rgb(202, 202, 202); border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">Descrição<br></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">1<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Strategy_1.mq5<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Expert Advisor<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">&nbsp;Estratégia №1. Indicador ADXCloud com RSI de confirmação sob a forma de histograma.&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">2<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Strategy_2.mql5<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Expert Advisor<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">&nbsp;Estratégia №2. Indicador de tendência Standart Deviation sob a forma de histograma com confirmação do RVI.</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">3<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Strategy_3.mq5<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Expert Advisor</td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">&nbsp;Estratégia №3. Interpretação de nuvem do AC de Bill Williams e Bears Power e Bulls Power combinados.&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">4<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Strategy_4.mq5<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Expert Advisor<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">&nbsp;Estratégia №4. Centro de gravidade J. F. Ehlers confirmado pleo indicador de celeridade do preço.</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">5<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Strategy_5.mq5</td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Expert Advisor</td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">&nbsp;Estratégia №5. Indicador integrado Onda Binária.</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">6<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Strategy_6.mq5<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Expert Advisor<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">&nbsp;Estratégia №6. Indicador integrado Weight Oscillator em conjunto com LeMan Objective.</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73); text-align:center;">7</td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Strategy_7.mq5&nbsp;<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">Expert Advisor<br></td>
+        <td style="border-bottom:1px solid rgb(73, 73, 73); border-left:1px solid rgb(73, 73, 73);">&nbsp;Estratégia
+ №7. Donchian Channelconfirmado por um MACD em que a série de preço é 
+substituída pelos valores do AO de Bill Williams.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;8&nbsp;</td>
+        <td>Strategy_8.mq5</td>
+        <td>Expert Advisor</td>
+        <td>&nbsp;Estratégia №8. Oscilador cíclico Schaff com confirmação sob a forma de três níveis Tirone.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;9</td>
+        <td>Strategy_9.mq5</td>
+        <td>Expert Advisor</td>
+        <td style="text-align:start;">&nbsp;Estratégia №9. Canal Keltner como um histograma e indicador iTrend na forma de nuvem.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;10</td>
+        <td>Strategy_10.mq5</td>
+        <td>Expert Advisor</td>
+        <td>&nbsp;Estratégia №10. Impulso de preço Average Change e leque de médias móveis FigurelliSeries.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;11</td>
+        <td>TradeFunctions.mqh</td>
+        <td>Biblioteca</td>
+        <td>&nbsp;Classe de funções de negociação.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;12</td>
+        <td>smoothalgorithms.mqh&nbsp;</td>
+        <td>Biblioteca</td>
+        <td>&nbsp;Classes com algoritmos de suavização usadas no indicador.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;13</td>
+        <td>adxcloud.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №1.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;14</td>
+        <td>rsi_сolor.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №1.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;15</td>
+        <td>colorstddev.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №2.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;16</td>
+        <td>colorzerolagrvi.mq5&nbsp;</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №2.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;17</td>
+        <td>Bear_Bulls_Power.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №3.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;18</td>
+        <td>cronexao.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №3.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;19</td>
+        <td>centerofgravityosma.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №4.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;20</td>
+        <td>average_speed.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №4.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;21</td>
+        <td>binarywave.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №5.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;22</td>
+        <td>objective.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №6.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;23</td>
+        <td>WeightOscillator.mq5</td>
+        <td>Indicador&nbsp;</td>
+        <td>&nbsp;Usa-se na Estratégia №6.</td>
+      </tr>
+      <tr>
+        <td>&nbsp;24</td>
+        <td>donchian_channels_system.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №7</td>
+      </tr>
+      <tr>
+        <td>&nbsp;25</td>
+        <td>cronexao.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №7</td>
+      </tr>
+      <tr>
+        <td>&nbsp;26</td>
+        <td>schafftrendcycle.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №8</td>
+      </tr>
+      <tr>
+        <td>&nbsp;27</td>
+        <td>tirone_levels_x3.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №8</td>
+      </tr>
+      <tr>
+        <td>&nbsp;28</td>
+        <td>i-klprice.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №9</td>
+      </tr>
+      <tr>
+        <td>&nbsp;29</td>
+        <td>i_trend.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №9</td>
+      </tr>
+      <tr>
+        <td>&nbsp;30</td>
+        <td>averagechange.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №10</td>
+      </tr>
+      <tr>
+        <td>&nbsp;31</td>
+        <td>figurelliseries.mq5</td>
+        <td>Indicador</td>
+        <td>&nbsp;Usa-se na Estratégia №10</td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <br>
+  </div>
+<br>
+<br>
+
+  </div>
+    </div>
+</div>
+
+   <script src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/all.js" type="text/javascript" defer="defer"></script><script src="Artigo%20-%20An%C3%A1lise%20comparativa%20de%2010%20estrat%C3%A9gias%20de%20tend%C3%AAncia_arquivos/articles.js" type="text/javascript" defer="defer"></script>
+   
+
+
+</body></html>
+<!-- Generated in 1.9778 ms -->
