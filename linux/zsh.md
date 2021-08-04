@@ -16,6 +16,8 @@ alias gsubforgl='git submodule foreach git pull'
 alias gsubforgst='git submodule foreach git status'
 alias gsubforgp='git submodule foreach git push'
 alias gsubforgco='git submodule foreach git checkout'
+
+alias psudo='sudo env "PATH=$PATH"'
 ```
 
 ## Plugins

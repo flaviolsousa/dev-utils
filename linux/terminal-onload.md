@@ -50,6 +50,8 @@ alias gpu='git push'
 alias gs='git status'
 alias gsv='git status -vv'
 
+alias psudo='sudo env "PATH=$PATH"'
+
 bind 'set completion-ignore-case on'
 #-------------------
 ```
