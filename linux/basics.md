@@ -9,3 +9,10 @@ du -a /usr/share/kibana/ | sort -n -r | head -n 20
 ```sh
 du -cks * | sort -rn | head
 ```
+
+### Available disk
+
+```sh
+df -h /home
+df -h /
+```
