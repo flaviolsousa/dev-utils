@@ -1,3 +1,9 @@
+### Login error
+
+```
+ctrl+alt+f1
+```
+
 ### Finding largest file recursively in directory
 
 ```sh
