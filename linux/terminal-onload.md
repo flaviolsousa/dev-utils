@@ -28,7 +28,7 @@ alias cd..5='cd ../../../../../'
 
 alias portls='netstat -tulpn | grep '
 
-alias update='sudo apt-get update && sudo apt-get -y autoremove && sudo apt-get -y upgrade'
+alias update='sudo apt-get update && sudo apt-get -y autoremove && sudo apt-get autoclean && sudo apt-get -y upgrade'
 
 alias svpn='cat /etc/resolv.conf'
 alias cvpn='echo -e "\nnameserver 172.16.20.10\nnameserver 172.16.20.11\n\n\n$(< /etc/resolv.conf)" | sudo tee /etc/resolv.conf && svpn'

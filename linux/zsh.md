@@ -5,7 +5,7 @@ alias explore=nemo
 
 alias portls='netstat -tulpn | grep '
 
-alias update='sudo apt-get update && sudo apt-get -y autoremove && sudo apt-get -y upgrade '
+alias update='sudo apt-get update && sudo apt-get -y autoremove && sudo apt-get autoclean && sudo apt-get -y upgrade '
 
 alias loopbackon='pactl load-module module-loopback latency_msec=1'
 alias loopbackoff='pactl unload-module module-loopback'
