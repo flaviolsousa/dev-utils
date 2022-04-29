@@ -22,3 +22,15 @@ du -cks * | sort -rn | head
 df -h /home
 df -h /
 ```
+
+### Remover message logs
+
+```sh
+sudo rm /var/log/messages-*
+```
+
+## Expurgo logs journalctl
+
+```sh
+sudo journalctl --vacuum-time=2d
+```
