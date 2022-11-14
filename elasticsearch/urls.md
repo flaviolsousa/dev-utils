@@ -51,8 +51,6 @@ GET /_snapshot/_status
 GET /_nodes/hot_threads
 GET /_tasks
 GET /_cat/tasks
-GET /_cat/thread_pool/search?v&h=node_name,name,active,rejected,completed
-GET /_cat/thread_pool
 GET /_nodes/stats
 GET /_nodes/stats/_all
 
