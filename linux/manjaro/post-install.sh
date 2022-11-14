@@ -23,7 +23,7 @@ sudo pacman -Syy
 echo ">>> Enable TRIM (SSD only)"
 sudo systemctl enable fstrim.timer
 
-echo ">>> Enable File Limits!"
+echo ">>> Enable File Limits"
 echo fs.nr_open=2147483584 | tee /etc/sysctl.d/40-max-user-watches.conf
 echo fs.file-max=100000 | tee /etc/sysctl.d/40-max-user-watches.conf
 echo fs.inotify.max_user_watches=524288 | tee /etc/sysctl.d/40-max-user-watches.conf
@@ -41,11 +41,20 @@ yes | pacman -Sy pamac-snap-plugin
 1 | pacman -Sy --noconfirm pamac-flatpak-plugin
 
 echo ">>> Install Packages"
-yes | pacman -Syu base-devel git whois gnome-disk-utility
-yes | pacman -Syu yay
+yes | pacman -Syu whois gnome-disk-utility
+
+echo ">>> Install yay"
+mkdir ~/apps
+cd ~/apps
+pacman -S --needed git base-devel
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
 
 echo ">>> Update packages"
 yay -Syu
 
 echo ">>> Install google-chrome"
 yay -S google-chrome
+
+echo ">>> Install google-chrome"
