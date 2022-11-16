@@ -19,7 +19,6 @@ git stash pop
 
 ```bash
 git submodule add ${GIT_URL_SSH} lib/commons
-
 git submodule add ${GIT_URL_SSH} lib/test-api
 ```
 
@@ -27,7 +26,7 @@ git submodule add ${GIT_URL_SSH} lib/test-api
 
 ```bash
 git clone ${GIT_URL_SSH} --recursive
-cd GTW_LAMBDA_LOCATIONS
+cd ${GIT_REPO_NAME}
 git checkout develop
 git submodule init
 git submodule update
@@ -40,7 +39,7 @@ echo foi!
 
 ```bash
 REPO_GIT=$1
-REPO_GIT=${REPO_GIT:-GTW_LAMBDA_LIB_COMMONS}
+REPO_GIT=${REPO_GIT}
 
 BRANCH_GIT=$2
 BRANCH_GIT=${BRANCH_GIT:-develop}
@@ -68,11 +67,10 @@ fi
 
 ```sh
 Remote:
-git push -f origin 888c97db32bae7271d2b2c6dc7a0897911995037:ti
+git push -f origin abcd97db32bae7271d2b2c6dc7a089791199xyz:ti
 
 Local:
-git reset --hard 888c97db32bae7271d2b2c6dc7a0897911995037
+git reset --hard abcd97db32bae7271d2b2c6dc7a089791199xyz
 #         ^^^^^^
 #         optional
 ```
-
