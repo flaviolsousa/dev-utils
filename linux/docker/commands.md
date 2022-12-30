@@ -17,7 +17,7 @@ docker exec -i -t $id_of_container /bin/bash
 ```sh
 docker stop $(docker ps -a -q)
 docker rm $(docker ps -a -q)
-docker network prune
-docker image prune -a
-docker volume prune
+docker network prune -f
+docker image prune -a -f
+docker volume prune -f
 ```
