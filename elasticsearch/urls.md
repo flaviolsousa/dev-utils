@@ -57,3 +57,10 @@ GET /_nodes/stats/_all
 // Without access on AWS
 POST /_cluster/reroute?retry_failed=true
 ```
+
+## Reference
+
+### Tunning
+
+- https://aws.amazon.com/blogs/big-data/best-practices-for-configuring-your-amazon-opensearch-service-domain/
+- https://aws.amazon.com/blogs/big-data/get-started-with-amazon-opensearch-service-t-shirt-size-your-domain/
