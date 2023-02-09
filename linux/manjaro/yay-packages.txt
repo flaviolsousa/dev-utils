@@ -1,0 +1,6 @@
+# List of all Apps to Install
+Chrome=google-chrome
+Firefox=firefox-developer-edition firefox-developer-edition-i18n-en-us firefox-developer-edition-i18n-pt-br
+VSCode=visual-studio-code-bin
+zsh=zsh
+jabba=jabba
