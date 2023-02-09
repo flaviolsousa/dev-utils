@@ -34,13 +34,14 @@ echo -e "\n\n >>> Install Packages \n"
 pacman -Syu whois gnome-disk-utility --noconfirm
 
 echo -e "\n\n >>> Install yay \n"
-mkdir ~/apps
-cd ~/apps
-pacman -S --needed git base-devel
-git clone https://aur.archlinux.org/yay.git
-cd yay
-makepkg -si
-pacman -S --needed git base-devel yay
+# mkdir ~/apps
+# cd ~/apps
+# pacman -S --needed git base-devel
+# git clone https://aur.archlinux.org/yay.git
+# cd yay
+# makepkg -si
+# pacman -S --needed git base-devel yay
+pacman -S yay --noconfirm
 
 echo -e "\n\n >>> Force colors in terminals \n"
 sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/g' /root/.bashrc
@@ -75,8 +76,4 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
 
-
-# echo -e "\n\n >>> Config Jabba \n"
-# jabba ls-remote
-# jabba install openjdk@1.11.0-1
 

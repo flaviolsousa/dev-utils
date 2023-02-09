@@ -4,3 +4,5 @@ Firefox=firefox-developer-edition firefox-developer-edition-i18n-en-us firefox-d
 VSCode=visual-studio-code-bin
 zsh=zsh
 jabba=jabba
+FileZilla=filezilla
+AutoKey=autokey-qt
