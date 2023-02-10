@@ -6,3 +6,4 @@ zsh=zsh
 jabba=jabba
 FileZilla=filezilla
 AutoKey=autokey-qt
+awesome-terminal-fonts
