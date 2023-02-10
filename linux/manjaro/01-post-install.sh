@@ -53,6 +53,16 @@ sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/g' /home/$u/.bashrc
 echo -e "\n\n >>> Update packages \n"
 yay -Syu
 
+echo -e "\n\n >>> Install Snap Packages \n"
+input="./snap-packages.txt"
+while IFS= read -r line
+do
+  if [[ "$line" =~ ^[^#].* ]]; then
+    echo -e "\n\n >>> Install $line"
+    snap install $line
+  fi
+done < "$input"
+
 echo -e "\n\n ### To continue execute: \n"
 echo "./02-post-install.sh"
 

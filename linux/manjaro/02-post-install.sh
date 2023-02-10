@@ -33,6 +33,13 @@ do
   fi
 done < "$input"
 
+echo -e "\n\n >>> Install Java \n"
+curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash && . ~/.jabba/jabba.sh
+
+jabba install adopt@1.11.0-11
+jabba alias default adopt@1.11.0-11
+
+
 echo -e "\n\n >>> Install Oh My ZSH \n"
 CHSH='yes'
 RUNZSH='no'
@@ -43,3 +50,4 @@ git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/theme
 
 cp /home/$u/.zshrc /home/$u/.zshrc-bkp
 cp .zshrc /home/$u/.zshrc
+

@@ -155,5 +155,5 @@ alias gsubforgst='git submodule foreach git status'
 alias gsubforgp='git submodule foreach git push'
 alias gsubforgco='git submodule foreach git checkout'
 
-[ -s "~/.jabba/jabba.sh" ] && source "~/.jabba/jabba.sh"
+[ -s "$HOME/.jabba/jabba.sh" ] && source "$HOME/.jabba/jabba.sh"
 
