@@ -1,18 +1,23 @@
 #!/bin/bash
 
-echo "### Manjaro Post Install 01 ###"
+source "./post-install-lib.sh"
+
+p_h2 "### Manjaro Post Install 01 ###"
 
 u=$(logname)
-echo u=$u
+p_prop u $u
+p_br
 
 if [ "$EUID" -ne 0 ]; then
-  echo "Please run WITH sudo, sudo ./run.sh"
-  echo "sudo ./01-post-install.sh"
+  p_error "Please run WITH sudo, sudo ./run.sh"
+  p_error "sudo ./01-post-install.sh"
   exit
 fi
 
 read -p "Press enter to continue"
 
+p_br
+p_h2 "Add current user to sudoers"
 sudo usermod -aG root -a $USER
 sudo usermod -aG wheel -a $USER
 cat >> /etc/sudoers <<<"$u  ALL=(ALL:ALL) NOPASSWD:ALL"
@@ -20,15 +25,15 @@ cat >> /etc/sudoers <<<"$u  ALL=(ALL:ALL) NOPASSWD:ALL"
 sudo pacman-mirrors --fasttrack
 sudo pacman -Syy
 
-echo -e "\n\n >>> Enable TRIM (SSD only) \n"
+p_h2 "Enable TRIM (SSD only)"
 sudo systemctl enable fstrim.timer
 
-echo -e "\n\n >>> Enable File Limits \n"
+p_h2 "Enable File Limits"
 echo fs.nr_open=2147483584 | tee /etc/sysctl.d/40-max-user-watches.conf
 echo fs.file-max=100000 | tee /etc/sysctl.d/40-max-user-watches.conf
 echo fs.inotify.max_user_watches=524288 | tee /etc/sysctl.d/40-max-user-watches.conf
 
-#echo -e "\n\n >>> Make .ssh folder for keys, make 4096 ssh keys, add authorized_key file and chmod! \n"
+#p_h2 "Make .ssh folder for keys, make 4096 ssh keys, add authorized_key file and chmod!"
 #mkdir /home/$u/.ssh
 #HOSTNAME=$(hostname) ssh-keygen -t rsa -b 4096 -C "$HOSTNAME" -f "/home/$u/.ssh/id_rsa" -P "" && cat /home/$u/.ssh/id_rsa.pub
 #touch /home/$u/.ssh/authorized_keys
@@ -36,29 +41,29 @@ echo fs.inotify.max_user_watches=524288 | tee /etc/sysctl.d/40-max-user-watches.
 #cp -r /root/.ssh /home/$u/
 #chown $u:$u /home/$u/.ssh -R
 
-echo -e "\n\n >>> Enabling snap in package manager \n"
+p_h2 "Enabling snap in package manager"
 pacman -Sy pamac-snap-plugin --noconfirm
 1 | pacman -Sy --noconfirm pamac-flatpak-plugin
 
-echo -e "\n\n >>> Install Packages \n"
+p_h2 "Install Packages"
 pacman -Syu whois gnome-disk-utility --noconfirm
 
-echo -e "\n\n >>> Install yay \n"
+p_h2 "Install yay"
 pacman -S yay --noconfirm
 
-echo -e "\n\n >>> Force colors in terminals \n"
+p_h2 "Force colors in terminals"
 sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/g' /root/.bashrc
 sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/g' /home/$u/.bashrc
 
-echo -e "\n\n >>> Update packages \n"
+p_h2 "Update packages"
 yay -Syu
 
-echo -e "\n\n >>> Install Snap Packages \n"
+p_h2 "Install Snap Packages"
 input="./snap-packages.txt"
 while IFS= read -r line
 do
   if [[ "$line" =~ ^[^#].* ]]; then
-    echo -e "\n\n >>> Install $line"
+    p_h2 "Install $l"
     snap install $line
   fi
 done < "$input"

@@ -7,3 +7,4 @@ zsh=zsh
 FileZilla=filezilla
 AutoKey=autokey-qt
 awesome-terminal-fonts
+# Wine=multilib/wine wine-mono wine-gecko multilib/winetricks

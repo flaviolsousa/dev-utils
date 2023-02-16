@@ -1,46 +1,48 @@
 #!/bin/bash
 
-echo "### Manjaro Post Install 02 ###"
+source "./post-install-lib.sh"
+
+p_h1 "### Manjaro Post Install 02 ###"
 
 u=$(logname)
-echo u=$u
+p_prop u $u
 
 if [ "$EUID" -eq 0 ]; then
-  echo "Please run WITHOUT sudo"
-  echo "./02-post-install.sh"
+  p_error "Please run WITHOUT sudo"
+  p_error "./02-post-install.sh"
   exit
 fi
 
 read -p "Press enter to continue"
 
-echo -e "\n\n >>> Install new packages \n"
+p_h2 "Install new packages"
 input="./yay-packages.txt"
 while IFS='=' read -r lineDesc lineApp
 do
   if [[ "$lineDesc" =~ ^[^#].* ]]; then
-    echo -e "\n\n >>> Install $lineDesc"
+    p_h2 "Install $lineD"
     yay -S $lineApp --needed --noconfirm
   fi
 done < "$input"
 
-echo -e "\n\n >>> Install VSCode Extensions \n"
+p_h2 "Install VSCode Extensions"
 input="./vscode-extensions.txt"
 while IFS= read -r line
 do
   if [[ "$line" =~ ^[^#].* ]]; then
-    echo -e "\n\n >>> vscode.ext = $line \n"
+    p_h2 "vscode.ext = $line"
     code --install-extension $line
   fi
 done < "$input"
 
-echo -e "\n\n >>> Install Java \n"
+p_h2 "Install Java"
 curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash && . ~/.jabba/jabba.sh
 
 jabba install adopt@1.11.0-11
 jabba alias default adopt@1.11.0-11
 
 
-echo -e "\n\n >>> Install Oh My ZSH \n"
+p_h2 "Install Oh My ZSH"
 CHSH='yes'
 RUNZSH='no'
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
