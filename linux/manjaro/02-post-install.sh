@@ -20,7 +20,7 @@ input="./yay-packages.txt"
 while IFS='=' read -r lineDesc lineApp
 do
   if [[ "$lineDesc" =~ ^[^#].* ]]; then
-    p_h2 "Install $lineD"
+    p_h2 "Install $lineDesc"
     yay -S $lineApp --needed --noconfirm
   fi
 done < "$input"
@@ -44,7 +44,7 @@ jabba alias default adopt@1.11.0-11
 
 p_h2 "Install Oh My ZSH"
 CHSH='yes'
-RUNZSH='no'
+RUNZSH='no' 
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
