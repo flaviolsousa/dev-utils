@@ -9,8 +9,9 @@ p_prop u $u
 p_br
 
 if [ "$EUID" -ne 0 ]; then
-  p_error "Please run WITH sudo, sudo ./run.sh"
+  p_error "Please run WITH sudo"
   p_error "sudo ./01-post-install.sh"
+  p_br
   exit
 fi
 
@@ -59,15 +60,20 @@ p_h2 "Update packages"
 yay -Syu
 
 p_h2 "Install Snap Packages"
-input="./snap-packages.txt"
+input="./snap-packages.conf"
 while IFS= read -r line
 do
   if [[ "$line" =~ ^[^#].* ]]; then
-    p_h2 "Install $l"
-    snap install $line
+    if [[ ! -z $line ]]; then
+      p_h2 "Install $line"
+      snap install $line
+    fi
   fi
 done < "$input"
 
-echo -e "\n\n ### To continue execute: \n"
+p_h2 "Changing Shell to zsh"
+chsh -s $(which zsh) $u
+
+p_h1 "### To continue execute"
 echo "./02-post-install.sh"
 

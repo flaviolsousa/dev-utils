@@ -6,32 +6,38 @@ p_h1 "### Manjaro Post Install 02 ###"
 
 u=$(logname)
 p_prop u $u
+p_br
 
 if [ "$EUID" -eq 0 ]; then
   p_error "Please run WITHOUT sudo"
   p_error "./02-post-install.sh"
+  p_br
   exit
 fi
 
 read -p "Press enter to continue"
 
 p_h2 "Install new packages"
-input="./yay-packages.txt"
+input="./yay-packages.conf"
 while IFS='=' read -r lineDesc lineApp
 do
   if [[ "$lineDesc" =~ ^[^#].* ]]; then
-    p_h2 "Install $lineDesc"
-    yay -S $lineApp --needed --noconfirm
+    if [[ ! -z $lineApp ]]; then
+      p_h2 "Install $lineDesc"
+      yay -S $lineApp --needed --noconfirm
+    fi
   fi
 done < "$input"
 
 p_h2 "Install VSCode Extensions"
-input="./vscode-extensions.txt"
+input="./vscode-extensions.conf"
 while IFS= read -r line
 do
   if [[ "$line" =~ ^[^#].* ]]; then
-    p_h2 "vscode.ext = $line"
-    code --install-extension $line
+    if [[ ! -z $line ]]; then
+      p_h2 "vscode.ext = $line"
+      code --install-extension $line
+    fi
   fi
 done < "$input"
 
@@ -52,4 +58,5 @@ git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/theme
 
 cp /home/$u/.zshrc /home/$u/.zshrc-bkp
 cp .zshrc /home/$u/.zshrc
+chsh -s $(which zsh)
 
