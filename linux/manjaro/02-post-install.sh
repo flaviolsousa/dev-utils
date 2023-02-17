@@ -17,7 +17,7 @@ fi
 
 read -p "Press enter to continue"
 
-p_h2 "Install new packages"
+p_h2 "Install yay -S {packages} --needed --noconfirm"
 input="./yay-packages.conf"
 while IFS='=' read -r lineDesc lineApp
 do
@@ -58,5 +58,10 @@ git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/theme
 
 cp /home/$u/.zshrc /home/$u/.zshrc-bkp
 cp .zshrc /home/$u/.zshrc
-chsh -s $(which zsh)
+
+p_h2 "Install NVM"
+echo 'source /usr/share/nvm/init-nvm.sh' >> ~/.zshrc
+nvm install --lts
+
+p_h2 "Install MVN"
 

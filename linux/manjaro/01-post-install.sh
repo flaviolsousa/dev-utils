@@ -43,8 +43,10 @@ echo fs.inotify.max_user_watches=524288 | tee /etc/sysctl.d/40-max-user-watches.
 #chown $u:$u /home/$u/.ssh -R
 
 p_h2 "Enabling snap in package manager"
-pacman -Sy pamac-snap-plugin --noconfirm
+pacman -Sy snapd pamac-snap-plugin --noconfirm
 1 | pacman -Sy --noconfirm pamac-flatpak-plugin
+# systemctl enable --now snapd.apparmor
+systemctl enable --now snapd.socket
 
 p_h2 "Install Packages"
 pacman -Syu whois gnome-disk-utility --noconfirm
@@ -73,6 +75,7 @@ done < "$input"
 
 p_h2 "Changing Shell to zsh"
 chsh -s $(which zsh) $u
+chsh -s $(which zsh)
 
 p_h1 "### To continue execute"
 echo "./02-post-install.sh"
