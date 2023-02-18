@@ -10,7 +10,7 @@ p_br
 
 if [ "$EUID" -ne 0 ]; then
   p_error "Please run WITH sudo"
-  p_error "sudo ./01-post-install.sh"
+  p_error "sudo ./01-post-install-sudo.sh"
   p_br
   exit
 fi
@@ -45,20 +45,6 @@ echo fs.inotify.max_user_watches=524288 | tee /etc/sysctl.d/40-max-user-watches.
 p_h2 "Enabling snap in package manager"
 pacman -Sy snapd pamac-snap-plugin --noconfirm
 1 | pacman -Sy --noconfirm pamac-flatpak-plugin
-# systemctl enable --now snapd.apparmor
-systemctl enable --now snapd.socket
-
-p_h2 "Install Snap Packages"
-input="./snap-packages.conf"
-while IFS= read -r line
-do
-  if [[ "$line" =~ ^[^#].* ]]; then
-    if [[ ! -z $line ]]; then
-      p_h2 "Install $line"
-      snap install $line
-    fi
-  fi
-done < "$input"
 
 p_h2 "Install Packages"
 pacman -Syu whois gnome-disk-utility --noconfirm
@@ -78,5 +64,12 @@ chsh -s $(which zsh) $u
 chsh -s $(which zsh)
 
 p_h1 "### To continue execute"
-echo "./02-post-install.sh"
+echo "sudo ./02-post-install-sudo.sh"
+
+read -r -p "Want restart? [Y/n] " response
+if [[ "$response" =~ ^([nN][oO]|[nN])$ ]]
+then
+  restart now
+fi
+
 

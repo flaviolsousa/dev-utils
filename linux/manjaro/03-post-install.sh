@@ -2,7 +2,7 @@
 
 source "./post-install-lib.sh"
 
-p_h1 "### Manjaro Post Install 02 ###"
+p_h1 "### Manjaro Post Install 03 ###"
 
 u=$(logname)
 p_prop u $u
@@ -10,7 +10,7 @@ p_br
 
 if [ "$EUID" -eq 0 ]; then
   p_error "Please run WITHOUT sudo"
-  p_error "./02-post-install.sh"
+  p_error "./03-post-install.sh"
   p_br
   exit
 fi
