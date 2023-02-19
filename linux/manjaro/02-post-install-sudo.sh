@@ -17,9 +17,14 @@ fi
 
 read -p "Press enter to continue"
 
+p_h2 "Enabling Snap"
+pacman -Sy snapd pamac-snap-plugin --noconfirm
+1 | pacman -Sy --noconfirm pamac-flatpak-plugin
+
 pacman -S snapd
-# systemctl enable --now snapd.apparmor
+
 systemctl enable --now snapd.socket
+systemctl enable --now snapd.apparmor
 
 p_h2 "Install Snap Packages"
 input="./snap-packages.conf"

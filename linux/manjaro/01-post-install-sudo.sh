@@ -42,10 +42,6 @@ echo fs.inotify.max_user_watches=524288 | tee /etc/sysctl.d/40-max-user-watches.
 #cp -r /root/.ssh /home/$u/
 #chown $u:$u /home/$u/.ssh -R
 
-p_h2 "Enabling snap in package manager"
-pacman -Sy snapd pamac-snap-plugin --noconfirm
-1 | pacman -Sy --noconfirm pamac-flatpak-plugin
-
 p_h2 "Install Packages"
 pacman -Syu whois gnome-disk-utility --noconfirm
 
