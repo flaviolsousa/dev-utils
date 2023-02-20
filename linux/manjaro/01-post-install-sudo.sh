@@ -59,13 +59,14 @@ p_h2 "Changing Shell to zsh"
 chsh -s $(which zsh) $u
 chsh -s $(which zsh)
 
-p_h1 "### To continue execute"
+p_h2 "Enabling Snap"
+pacman -Sy snapd pamac-snap-plugin --noconfirm
+1 | pacman -Sy --noconfirm pamac-flatpak-plugin
+
+pacman -S snapd
+
+systemctl enable --now snapd.socket
+systemctl enable --now snapd.apparmor
+
+p_h1 "### To continue Restart and Execute"
 echo "sudo ./02-post-install-sudo.sh"
-
-read -r -p "Want restart? [Y/n] " response
-if [[ "$response" =~ ^([nN][oO]|[nN])$ ]]
-then
-  restart now
-fi
-
-

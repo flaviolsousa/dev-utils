@@ -17,15 +17,6 @@ fi
 
 read -p "Press enter to continue"
 
-p_h2 "Enabling Snap"
-pacman -Sy snapd pamac-snap-plugin --noconfirm
-1 | pacman -Sy --noconfirm pamac-flatpak-plugin
-
-pacman -S snapd
-
-systemctl enable --now snapd.socket
-systemctl enable --now snapd.apparmor
-
 p_h2 "Install Snap Packages"
 input="./snap-packages.conf"
 while IFS= read -r line
@@ -37,6 +28,10 @@ do
     fi
   fi
 done < "$input"
+
+p_h2 "Install VirtualBox"
+pacman -Syu virtualbox linux54-virtualbox-host-modules
+vboxreload
 
 p_h1 "### To continue execute"
 echo "./03-post-install.sh"
