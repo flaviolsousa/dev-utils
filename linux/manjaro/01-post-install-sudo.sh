@@ -68,5 +68,8 @@ pacman -S snapd
 systemctl enable --now snapd.socket
 systemctl enable --now snapd.apparmor
 
+snap install hello-world
+
 p_h1 "### To continue Restart and Execute"
 echo "sudo ./02-post-install-sudo.sh"
+
