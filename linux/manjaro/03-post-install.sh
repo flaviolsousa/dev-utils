@@ -62,6 +62,3 @@ cp .zshrc /home/$u/.zshrc
 p_h2 "Install NVM"
 echo 'source /usr/share/nvm/init-nvm.sh' >> ~/.zshrc
 nvm install --lts
-
-p_h2 "Install MVN"
-

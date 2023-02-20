@@ -43,7 +43,10 @@ echo fs.inotify.max_user_watches=524288 | tee /etc/sysctl.d/40-max-user-watches.
 #chown $u:$u /home/$u/.ssh -R
 
 p_h2 "Install Packages"
-pacman -Syu whois gnome-disk-utility --noconfirm
+pacman -Syu whois gnome-disk-utility snapd --noconfirm
+
+systemctl enable --now snapd.socket
+systemctl enable --now snapd.apparmor
 
 p_h2 "Install yay"
 pacman -S yay --noconfirm
@@ -63,13 +66,10 @@ p_h2 "Enabling Snap"
 pacman -Sy snapd pamac-snap-plugin --noconfirm
 1 | pacman -Sy --noconfirm pamac-flatpak-plugin
 
-pacman -S snapd
-
-systemctl enable --now snapd.socket
-systemctl enable --now snapd.apparmor
-
 snap install hello-world
 
 p_h1 "### To continue Restart and Execute"
 echo "sudo ./02-post-install-sudo.sh"
+p_br
+p_br
 

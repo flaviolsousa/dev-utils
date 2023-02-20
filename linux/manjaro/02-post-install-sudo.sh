@@ -35,4 +35,6 @@ vboxreload
 
 p_h1 "### To continue execute"
 echo "./03-post-install.sh"
+p_br
+p_br
 
