@@ -30,8 +30,10 @@ do
 done < "$input"
 
 p_h2 "Install VirtualBox"
-pacman -Syu virtualbox linux54-virtualbox-host-modules
+pacman -S virtualbox linux54-virtualbox-host-modules virtualbox-guest-iso
 vboxreload
+sudo usermod -a -G vboxusers $u
+# pacman -Syu virtualbox-host-dkms --noconfirm 
 
 p_h1 "### To continue execute"
 echo "./03-post-install.sh"
