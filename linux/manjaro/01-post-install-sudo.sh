@@ -43,7 +43,7 @@ echo fs.inotify.max_user_watches=524288 | tee /etc/sysctl.d/40-max-user-watches.
 #chown $u:$u /home/$u/.ssh -R
 
 p_h2 "Install Packages"
-pacman -Syu whois gnome-disk-utility snapd --noconfirm
+pacman -Syu whois gnome-disk-utility tk snapd --noconfirm
 
 systemctl enable --now snapd.socket
 systemctl enable --now snapd.apparmor
