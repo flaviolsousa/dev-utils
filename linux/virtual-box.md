@@ -40,7 +40,7 @@ sudo apt-get update
 sudo apt-get install -y virtualbox-6.1
 ```
 
-## Bug sudo vboxreload => modprobe: FATAL: Module vboxnetadp not found in directory ...
+## Manjaro - Bug sudo vboxreload => modprobe: FATAL: Module vboxnetadp not found in directory ...
 
 ```sh
 sudo vboxreload
@@ -48,4 +48,15 @@ mhwd-kernel -li
 # Currently running: 6.1.12-1-MANJARO (linux61)    ##### 61 #####
 yay -S linux61-virtualbox-host-modules             ##### Must fix de kernel version
 sudo vboxreload
+```
+
+## Ubuntu - Re-install virtualbox-dkms package first
+
+```sh
+sudo apt-get autoremove virtualbox-dkms
+sudo apt-get install build-essential linux-headers-`uname -r` dkms virtualbox-dkms
+
+# After that You can enable it manually
+sudo modprobe vboxdrv
+sudo modprobe vboxnetflt
 ```
