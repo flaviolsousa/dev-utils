@@ -1,4 +1,4 @@
-﻿; AutoHotkey2
+; AutoHotkey2
 
 Copy()
 {
@@ -67,6 +67,82 @@ ToListVarcharMenuHandler(Item, *)
   text := StrReplace(text, "`n", "', '")
   text := "'" . text . "'"
   A_Clipboard := text
+  Paste()
+}
+
+ToList999NumberMenuHandler(Item, *)
+{
+  Copy()
+  text := A_Clipboard
+  text := StrReplace(text, "`r`n", "`n")
+  items := StrSplit(text, "`n")
+
+  result := ""
+  block := ""
+  count := 0
+  for index, item in items
+  {
+    if (block = "")
+      block := item
+    else
+      block .= ", " . item
+
+    count++
+    if (count = 999)
+    {
+      if (result != "")
+        result .= "`n"
+      result .= block
+      block := ""
+      count := 0
+    }
+  }
+  if (block != "")
+  {
+    if (result != "")
+      result .= "`n"
+    result .= block
+  }
+
+  A_Clipboard := result
+  Paste()
+}
+
+ToList999VarcharMenuHandler(Item, *)
+{
+  Copy()
+  text := A_Clipboard
+  text := StrReplace(text, "`r`n", "`n")
+  items := StrSplit(text, "`n")
+
+  result := ""
+  block := ""
+  count := 0
+  for index, item in items
+  {
+    if (block = "")
+      block := item
+    else
+      block .= "', '" . item
+
+    count++
+    if (count = 999)
+    {
+      if (result != "")
+        result .= "`n"
+      result .= "'" . block . "'"
+      block := ""
+      count := 0
+    }
+  }
+  if (block != "")
+  {
+    if (result != "")
+      result .= "`n"
+    result .= "'" . block . "'"
+  }
+
+  A_Clipboard := result
   Paste()
 }
 
@@ -191,6 +267,35 @@ ToUniqueLinesMenuHandler(Item, *)
   Paste()
 }
 
+ToCountDuplicateLinesMenuHandler(Item, *)
+{
+  Copy()
+  lines := StrSplit(A_Clipboard, "`n", "`r")
+  lineCounts := Map()
+
+  for line in lines
+  {
+    line := Trim(line)
+    if (line != "")
+    {
+      if lineCounts.Has(line)
+        lineCounts[line] += 1
+      else
+        lineCounts[line] := 1
+    }
+  }
+
+  A_Clipboard := ""
+  for line, count in lineCounts
+  {
+    if (count > 1)
+      A_Clipboard .= count " => " line "`r`n"
+  }
+
+  A_Clipboard := Trim(A_Clipboard, "`r`n")
+  Paste()
+}
+
 ToAscendingLinesMenuHandler(Item, *)
 {
   Copy()
@@ -205,24 +310,124 @@ ToDescendingLinesMenuHandler(Item, *)
   Paste()
 }
 
+ToBase64EncodeMenuHandler(Item, *)
+{
+  Copy()
+  text := A_Clipboard
+  text := StrReplace(text, "`r`n", "`n")
+  items := StrSplit(text, "`n")
+
+  result := ""
+  for index, item in items
+  {
+    if (item = "") {
+      result .= "`n"
+      continue
+    }
+    ; Encode item as UTF-8
+    buf := Buffer(StrPut(item, "UTF-8"))
+    StrPut(item, buf, "UTF-8")
+    ; Prepare output buffer for base64
+    DllCall("Crypt32.dll\CryptBinaryToString"
+      , "Ptr", buf.Ptr
+      , "UInt", buf.Size
+      , "UInt", 0x1 ; CRYPT_STRING_BASE64
+      , "Ptr", 0
+      , "UInt*", &outLen := 0)
+    outBuf := Buffer(outLen << 1, 0)
+    DllCall("Crypt32.dll\CryptBinaryToString"
+      , "Ptr", buf.Ptr
+      , "UInt", buf.Size
+      , "UInt", 0x1
+      , "Ptr", outBuf.Ptr
+      , "UInt*", outLen)
+    base64 := StrReplace(StrGet(outBuf), "`r`n", "")
+    result .= base64 . "`n"
+  }
+  ; Remove trailing newline if present
+  if (SubStr(result, -1) = "`n")
+    result := SubStr(result, 1, -1)
+  A_Clipboard := result
+  Paste()
+}
+
+ToBase64DecodeMenuHandler(Item, *)
+{
+  Copy()
+  text := A_Clipboard
+  text := StrReplace(text, "`r`n", "`n")
+  items := StrSplit(text, "`n")
+
+  result := ""
+  for index, item in items
+  {
+    if (item = "") {
+      result .= "`n"
+      continue
+    }
+    ; Descobrir tamanho do buffer decodificado
+    DllCall("Crypt32.dll\CryptStringToBinary"
+      , "Str", item
+      , "UInt", 0
+      , "UInt", 0x1 ; CRYPT_STRING_BASE64
+      , "Ptr", 0
+      , "UInt*", &binLen := 0
+      , "Ptr", 0
+      , "Ptr", 0)
+    if (binLen = 0) {
+      result .= "`n"
+      continue
+    }
+    binBuf := Buffer(binLen, 0)
+    DllCall("Crypt32.dll\CryptStringToBinary"
+      , "Str", item
+      , "UInt", 0
+      , "UInt", 0x1
+      , "Ptr", binBuf.Ptr
+      , "UInt*", binLen
+      , "Ptr", 0
+      , "Ptr", 0)
+    ; Converter binário para string UTF-8
+    decoded := StrGet(binBuf, "UTF-8")
+    result .= decoded . "`n"
+  }
+  ; Remove trailing newline if present
+  if (SubStr(result, -1) = "`n")
+    result := SubStr(result, 1, -1)
+  A_Clipboard := result
+  Paste()
+}
+
 MyMenu := Menu()
-MyMenu.Add("To Upper Case", ToUpperCaseMenuHandler)
-MyMenu.Add("To Lower Case", ToLowerCaseMenuHandler)
+CaseMenu := Menu()
+CaseMenu.Add("To Upper Case", ToUpperCaseMenuHandler)
+CaseMenu.Add("To Lower Case", ToLowerCaseMenuHandler)
+CaseMenu.Add()
+CaseMenu.Add("To camelCase", ToCamelCaseMenuHandler)
+CaseMenu.Add("To PascalCase", ToPascalCaseMenuHandler)
+CaseMenu.Add("To snake_case", ToSnakeCaseMenuHandler)
+CaseMenu.Add("To kebab-case", ToKebabCaseMenuHandler)
+CaseMenu.Add("To Title Case", ToTitleCaseMenuHandler)
+CaseMenu.Add("To Sentence case", ToSentenceCaseMenuHandler)
+CaseMenu.Add("To dot.case", ToDotCaseMenuHandler)
+MyMenu.Add("Case", CaseMenu)
 MyMenu.Add()
-MyMenu.Add("To camelCase", ToCamelCaseMenuHandler)
-MyMenu.Add("To PascalCase", ToPascalCaseMenuHandler)
-MyMenu.Add("To snake_case", ToSnakeCaseMenuHandler)
-MyMenu.Add("To kebab-case", ToKebabCaseMenuHandler)
-MyMenu.Add("To Title Case", ToTitleCaseMenuHandler)
-MyMenu.Add("To Sentence case", ToSentenceCaseMenuHandler)
-MyMenu.Add("To dot.case", ToDotCaseMenuHandler)
-MyMenu.Add()
-MyMenu.Add("To NumbersOnly", ToNumbersOnlyMenuHandler)
-MyMenu.Add("To UniqueLines", ToUniqueLinesMenuHandler)
-MyMenu.Add("To AscendingLines", ToAscendingLinesMenuHandler)
-MyMenu.Add("To DescendingLines", ToDescendingLinesMenuHandler)
-MyMenu.Add()
-MyMenu.Add("To ListNumber", ToListNumberMenuHandler)
-MyMenu.Add("To ListVarchar", ToListVarcharMenuHandler)
+MyMenu.Add("To Numbers Only", ToNumbersOnlyMenuHandler)
+MyMenu.Add("To Unique Lines", ToUniqueLinesMenuHandler)
+MyMenu.Add("To Count Duplicate Lines", ToCountDuplicateLinesMenuHandler)
+SortMenu := Menu()
+SortMenu.Add("Ascending", ToAscendingLinesMenuHandler)
+SortMenu.Add("Descending", ToDescendingLinesMenuHandler)
+MyMenu.Add("Sort Lines", SortMenu)
+CreateListMenu := Menu()
+CreateListMenu.Add("To ListNumber", ToListNumberMenuHandler)
+CreateListMenu.Add("To ListVarchar", ToListVarcharMenuHandler)
+CreateListMenu.Add("To List999Number", ToList999NumberMenuHandler)
+CreateListMenu.Add("To List999Varchar", ToList999VarcharMenuHandler)
+MyMenu.Add("Create List", CreateListMenu)
+Base64Menu := Menu()
+Base64Menu.Add("Encode", ToBase64EncodeMenuHandler)
+Base64Menu.Add("Decode", ToBase64DecodeMenuHandler)
+MyMenu.Add("Base64", Base64Menu)
 
 #f:: MyMenu.Show()
